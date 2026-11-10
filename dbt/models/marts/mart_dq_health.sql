@@ -25,10 +25,19 @@ flagged as (
     select session_key, 'DQ-PIT-001', 'flagged', count(*)
     from {{ ref('stg_pit') }} where {{ has_flag('dq_flags', 'DQ-PIT-001') }}
     group by session_key
+    union all
+    select session_key, 'DQ-POS-004', 'flagged', count(*)
+    from {{ ref('stg_position') }} where {{ has_flag('dq_flags', 'DQ-POS-004') }}
+    group by session_key
+    union all
+    select session_key, 'DQ-INT-003', 'flagged', count(*)
+    from {{ ref('stg_intervals') }} where {{ has_flag('dq_flags', 'DQ-INT-003') }}
+    group by session_key
 )
 
 select
     u.session_key,
+    ses.year as season,
     ses.circuit_short_name,
     ses.session_name,
     u.rule_code,

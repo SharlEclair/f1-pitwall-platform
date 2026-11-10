@@ -6,6 +6,7 @@ raw rows == silver rows + quarantined rows (see `Result.reconciliation`).
 """
 
 import json
+import re
 import statistics
 from collections import Counter, defaultdict
 from dataclasses import dataclass
@@ -13,13 +14,18 @@ from datetime import datetime, timedelta
 
 import polars as pl
 
-from validate.rules import EXPECTED_FIELDS, KNOWN_COMPOUNDS, REGISTRY
+from validate.rules import EXPECTED_FIELDS, KNOWN_COMPOUNDS, OPTIONAL_FIELDS, REGISTRY
 from validate.track_status import lap_statuses
 
-ENDPOINTS = ("laps", "stints", "pit", "drivers", "race_control", "weather")
+ENDPOINTS = (
+    "laps", "stints", "pit", "drivers", "race_control", "weather", "position", "intervals",
+)
 LONG_LAP_RATIO = 1.3
 SECTOR_TOLERANCE = 0.05
 LONG_PIT_SECONDS = 60.0
+MAX_GRID_SIZE = 22
+DUPLICATE_POSITION_GRACE = timedelta(seconds=10)
+LAPS_DOWN = re.compile(r"^\+(\d+) LAPS?$")
 
 SILVER_SCHEMA = {
     "laps": {
@@ -55,6 +61,15 @@ SILVER_SCHEMA = {
         "pressure": pl.Float64, "rainfall": pl.Float64, "wind_speed": pl.Float64,
         "wind_direction": pl.Int64,
     },
+    # Column names avoid SQL keywords: POSITION and INTERVAL are keywords in Snowflake.
+    "position": {
+        "session_key": pl.Int64, "driver_number": pl.Int64, "date": pl.Datetime("us", "UTC"),
+        "race_position": pl.Int64,
+    },
+    "intervals": {
+        "session_key": pl.Int64, "driver_number": pl.Int64, "date": pl.Datetime("us", "UTC"),
+        "interval_s": pl.Float64, "gap_to_leader_s": pl.Float64, "laps_down": pl.Int64,
+    },
 }
 QUARANTINE_SCHEMA = {
     "session_key": pl.Int64, "endpoint": pl.Utf8, "row_index": pl.Int64, "source_key": pl.Utf8,
@@ -72,6 +87,27 @@ class Result:
     @property
     def balanced(self):
         return all(r["raw"] == r["silver"] + r["quarantined"] for r in self.reconciliation.values())
+
+
+# Silver column -> raw field where the names differ (see the SQL-keyword note above).
+SOURCE_FIELD = {
+    ("position", "race_position"): "position",
+    ("intervals", "interval_s"): "interval",
+    ("intervals", "gap_to_leader_s"): "gap_to_leader",
+}
+
+
+def _intervals_record(row, record):
+    """Numbers stay numbers; '+N LAP' text becomes laps_down, never a fake number."""
+    record["laps_down"] = None
+    for field, column in (("interval", "interval_s"), ("gap_to_leader", "gap_to_leader_s")):
+        value = row[field]
+        if not _is_number(value):
+            record[column] = None
+            match = LAPS_DOWN.match(value) if isinstance(value, str) else None
+            if match:
+                record["laps_down"] = max(record["laps_down"] or 0, int(match.group(1)))
+    return record
 
 
 def _parse_time(value):
@@ -93,7 +129,7 @@ def validate_session(session_key, raw, source_keys=None):
         if not data[name]:
             add(name, -1, "DQ-SESS-002", f"{name} returned no rows")
         for index, row in enumerate(data[name]):
-            missing = EXPECTED_FIELDS[name] - row.keys()
+            missing = EXPECTED_FIELDS[name] - OPTIONAL_FIELDS.get(name, set()) - row.keys()
             extra = row.keys() - EXPECTED_FIELDS[name]
             if missing:
                 add(name, index, "DQ-API-001", f"missing fields: {sorted(missing)}")
@@ -109,10 +145,12 @@ def validate_session(session_key, raw, source_keys=None):
     _check_laps(usable("laps"), status, usable("pit"), add)
     _check_stints(usable("stints"), usable("laps"), add)
     for index, row in usable("pit"):
-        if (row.get("pit_duration") or 0) > LONG_PIT_SECONDS:
-            add("pit", index, "DQ-PIT-001", f"pit_duration {row['pit_duration']} s")
+        if (row.get("lane_duration") or 0) > LONG_PIT_SECONDS:
+            add("pit", index, "DQ-PIT-001", f"lane_duration {row['lane_duration']} s")
         if row.get("stop_duration") is None:
             add("pit", index, "DQ-PIT-002", "stop_duration is null")
+    _check_position(usable("position"), usable("drivers"), add)
+    _check_intervals(usable("intervals"), add)
     teams = defaultdict(set)
     for _, row in usable("drivers"):
         teams[row.get("driver_number")].add(row.get("team_name"))
@@ -154,6 +192,66 @@ def _check_laps(laps, status, pits, add):
         if (median and duration > LONG_LAP_RATIO * median and track == "GREEN"
                 and not row["is_pit_out_lap"] and key not in in_laps):
             add("laps", index, "DQ-LAP-004", f"{duration} s vs session median {median:.1f} s")
+
+
+def _is_number(value):
+    return isinstance(value, (int, float)) and not isinstance(value, bool)
+
+
+def _check_position(positions, drivers, add):
+    known = {row.get("driver_number") for _, row in drivers}
+    by_instant = defaultdict(list)
+    for index, row in positions:
+        value = row["position"]
+        if not (isinstance(value, int) and not isinstance(value, bool)
+                and 1 <= value <= MAX_GRID_SIZE):
+            add("position", index, "DQ-POS-001", f"position {value!r}")
+        if known and row["driver_number"] not in known:
+            add("position", index, "DQ-POS-003", f"driver {row['driver_number']} not in drivers")
+        by_instant[_parse_time(row["date"])].append((index, row))
+
+    # Replay the stream. Two updates for one overtake often land a second or two apart, so a
+    # short-lived duplicate is normal (2024: all 87 lasted under 5 s); only one that persists
+    # beyond DUPLICATE_POSITION_GRACE is flagged.
+    current, duplicate_since = {}, None
+    for instant in sorted(by_instant, key=lambda t: (t is None, t)):
+        group = by_instant[instant]
+        seen = Counter(r["driver_number"] for _, r in group)
+        for index, row in group:
+            count = seen[row["driver_number"]]
+            if count > 1:
+                add("position", index, "DQ-POS-002",
+                    f"driver {row['driver_number']} has {count} rows at {instant}")
+            else:
+                current[row["driver_number"]] = row["position"]
+        if len(set(current.values())) == len(current):
+            duplicate_since = None
+            continue
+        duplicate_since = duplicate_since or instant
+        if instant is not None and instant - duplicate_since > DUPLICATE_POSITION_GRACE:
+            for index, _row in group:
+                add("position", index, "DQ-POS-004",
+                    f"duplicate positions since {duplicate_since}")
+
+
+def _check_intervals(intervals, add):
+    for index, row in intervals:
+        numbers = []
+        for field in ("interval", "gap_to_leader"):
+            value = row[field]
+            if value is None:
+                continue
+            if _is_number(value):
+                numbers.append((field, value))
+                if value < 0:
+                    add("intervals", index, "DQ-INT-002", f"{field} {value}")
+            elif not (isinstance(value, str) and LAPS_DOWN.match(value)):
+                add("intervals", index, "DQ-INT-001", f"{field} {value!r}")
+        values = dict(numbers)
+        if "interval" in values and "gap_to_leader" in values:
+            if values["gap_to_leader"] < values["interval"]:
+                add("intervals", index, "DQ-INT-003",
+                    f"gap_to_leader {values['gap_to_leader']} < interval {values['interval']}")
 
 
 def _check_stints(stints, laps, add):
@@ -215,7 +313,9 @@ def _assemble(session_key, data, issues, fired, source_keys, status):
             flags = sorted(
                 c for c, _ in issues.get((endpoint, index), []) if REGISTRY[c].severity == "flag"
             )
-            record = {name: row.get(name) for name in schema}
+            record = {name: row.get(SOURCE_FIELD.get((endpoint, name), name)) for name in schema}
+            if endpoint == "intervals":
+                record = _intervals_record(row, record)
             for name in ("date_start", "date"):
                 if name in record:
                     record[name] = _parse_time(record[name])

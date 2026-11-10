@@ -52,3 +52,30 @@ that can be a number, null (race leader) or text such as "+1 LAP".
   races). This is not the frozen definition and not a rate.
 - The sample covers four races of one season. Positions at red-flag restarts and during Safety Car
   periods were not examined beyond the above and are handled by exclusion in the undercut definition.
+
+## Addendum: measured 2024 backfill (2026-11-11)
+- **Ingest:** both endpoints added for all 30 sessions of 2024 on Lambda: 60 new raw objects in 202 s
+  (wall time, including a cold start). A repeat run wrote 0 objects in 5 s. A local run of the same 60
+  calls took 165.6 s, about 2.8 s per call, the same per-call rate as Phase 1's backfill (211 objects in
+  583 s). A full season from scratch (30 sessions x 9 calls) is therefore estimated at about 750 s against
+  the 900 s limit. This is an estimate, not a measurement. The handler now stops starting new sessions
+  when under 90 s remain and reports `stopped_early`; completed sessions have manifests, so running it
+  again finishes the rest.
+- **Existing sessions:** a manifest written before an endpoint existed is completed by fetching only the
+  missing endpoints; objects already stored are not refetched.
+- **Storage:** the bucket went from 452 objects (17.4 MB) to 572 objects (111.4 MB), almost all of it
+  `intervals`: 613,428 rows in 2024 against 11,930 for `position`.
+- **Validation:** 30 of 30 sessions balance (raw = silver + quarantine, nothing quarantined for the
+  new endpoints). The Lambda validator took 40.9 s and 213 MB (Phase 1: 16.7 to 19.0 s, 173 MB). The
+  silver and quarantine Parquet from Lambda match a local run for all 270 files.
+- **Rule calibration (the first versions were hypotheses):** DQ-POS-004 first flagged any duplicate
+  position right after an update and fired on 166 rows, but all 87 such duplicates lasted under 5 s
+  (two updates for one overtake arrive seconds apart); it now flags duplicates lasting over 10 s and
+  fires on none. DQ-INT-003 (gap to leader below gap to the car ahead) fires on 1,106 of 613,428 rows,
+  and 1,001 of them differ by more than 5 s, almost all in Baku and Singapore; they are flagged and kept,
+  and gap-based analysis must treat them as unknown. The other new rules fired on no 2024 row.
+- **Warehouse:** loaded through the internal stage (60 files); `POSITION` 11,930 and `INTERVALS` 613,428
+  rows match the Parquet, and all nine tables reconcile. `dbt build` passes 75 of 75 on Snowflake and on
+  DuckDB. Silver columns are named `race_position`, `interval_s` and `gap_to_leader_s` because POSITION
+  and INTERVAL are SQL keywords. The DuckDB fixture for these two tables is synthetic, derived from the
+  committed fixture laps, so no new row-level OpenF1 data is committed.

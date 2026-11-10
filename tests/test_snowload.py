@@ -22,7 +22,10 @@ def test_laps_ddl_uses_validator_schema_and_snowflake_types():
 
 def test_every_silver_endpoint_and_quarantine_has_a_table():
     names = {name for name, _ in create_table_statements()}
-    assert names == {"LAPS", "STINTS", "PIT", "DRIVERS", "RACE_CONTROL", "WEATHER", "QUARANTINE"}
+    assert names == {
+        "LAPS", "STINTS", "PIT", "DRIVERS", "RACE_CONTROL", "WEATHER", "POSITION", "INTERVALS",
+        "QUARANTINE",
+    }
 
 
 def test_copy_matches_columns_by_name_and_only_forces_on_full_refresh():

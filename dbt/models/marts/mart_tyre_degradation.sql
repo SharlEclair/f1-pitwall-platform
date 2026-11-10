@@ -59,6 +59,7 @@ censoring as (
 
 select
     f.session_key,
+    ses.year as season,
     f.circuit_short_name,
     f.session_name,
     f.compound,
@@ -74,3 +75,5 @@ select
 from fits as f
 left join censoring as c
     on f.session_key = c.session_key and f.compound = c.compound
+inner join {{ ref('stg_sessions') }} as ses
+    on f.session_key = ses.session_key

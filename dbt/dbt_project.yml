@@ -16,6 +16,10 @@ vars:
   fuel_effect_s_per_lap: 0.04
   # Minimum clean laps (and distinct tyre ages) before a degradation slope is reported.
   min_laps_for_slope: 10
+  # Undercut candidates (ADR 0015): the gap must come from an intervals row at most this old.
+  undercut_max_gap_age_s: 10
+  # How many laps after A's stop to look for B's response stop when materialising candidates.
+  undercut_horizon_laps: 10
 
 seeds:
   f1_pitwall:
@@ -24,6 +28,13 @@ seeds:
         session_key: integer
         meeting_key: integer
         year: integer
+    undercut_grid:
+      +column_types:
+        grid_id: integer
+        gap_s: float
+        response_laps: integer
+        exclude_neutralised: boolean
+        is_primary: boolean
 
 models:
   f1_pitwall:

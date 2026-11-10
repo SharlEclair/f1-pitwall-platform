@@ -98,9 +98,41 @@ def test_object_key_is_content_hash_and_manifest_lists_endpoints(tmp_path):
     manifest_path = tmp_path / "raw/season=2024/session_key=1/_complete.json"
     manifest = json.loads(manifest_path.read_text())
     assert set(manifest["objects"]) == {
-        "meetings", "drivers", "laps", "stints", "pit", "weather", "race_control"
+        "meetings", "drivers", "laps", "stints", "pit", "weather", "race_control", "position",
+        "intervals",
     }
     key = manifest["objects"]["laps"]["key"]
     assert (tmp_path / key).exists()
     assert key.startswith("raw/season=2024/session_key=1/endpoint=laps/")
     assert key.endswith(".json")
+
+
+def test_manifest_from_before_an_endpoint_was_added_fetches_only_the_missing_endpoints(tmp_path):
+    store = LocalStore(tmp_path)
+    run_season(FakeClient([session(1)]), store, 2024, NOW)
+    manifest_path = tmp_path / "raw/season=2024/session_key=1/_complete.json"
+    manifest = json.loads(manifest_path.read_text())
+    del manifest["objects"]["position"]  # as written before the endpoint existed
+    manifest_path.write_text(json.dumps(manifest))
+
+    client = FakeClient([session(1)])
+    summary = run_season(client, store, 2024, NOW)
+
+    fetched = [endpoint for endpoint, _ in client.calls]
+    assert fetched == ["sessions", "position"]
+    assert summary["ingested"] == 1
+    assert "position" in json.loads(manifest_path.read_text())["objects"]
+    assert run_season(FakeClient([session(1)]), store, 2024, NOW)["skipped_complete"] == 1
+
+
+def test_run_stops_early_when_out_of_time_and_a_second_run_finishes_the_rest(tmp_path):
+    store = LocalStore(tmp_path)
+    sessions = [session(1), session(2), session(3)]
+    budget = iter([False, True])  # allow one session, then report "out of time"
+    first = run_season(FakeClient(sessions), store, 2024, NOW, should_stop=lambda: next(budget))
+    assert first["ingested"] == 1 and first["stopped_early"] is True
+    assert "2 sessions left" in first["message"]
+
+    second = run_season(FakeClient(sessions), store, 2024, NOW)
+    assert second["ingested"] == 2 and second["skipped_complete"] == 1
+    assert "stopped_early" not in second

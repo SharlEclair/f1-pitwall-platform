@@ -40,6 +40,14 @@ BASE_ROWS = {
         "air_temperature": 25.0, "pressure": 1000.0, "wind_direction": 100,
         "meeting_key": 1, "track_temperature": 40.0, "wind_speed": 1.0,
     },
+    "position": {
+        "date": "2024-01-01T10:00:00+00:00", "session_key": 1, "meeting_key": 1,
+        "driver_number": 1, "position": 1,
+    },
+    "intervals": {
+        "date": "2024-01-01T10:00:05+00:00", "session_key": 1, "meeting_key": 1,
+        "driver_number": 1, "interval": None, "gap_to_leader": None,
+    },
 }
 
 
@@ -74,6 +82,9 @@ def baseline_session():
         ],
         "race_control": [row("race_control")],
         "weather": [row("weather")],
+        "position": [row("position"), row("position", driver_number=2, position=2)],
+        "intervals": [row("intervals"),
+                      row("intervals", driver_number=2, interval=1.5, gap_to_leader=1.5)],
     }
 
 

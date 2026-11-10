@@ -7,6 +7,7 @@ from ml.lapmodel import (
     build_examples,
     fit_b1,
     predict_b1,
+    run_leave_one_season_out,
     run_loro,
 )
 
@@ -20,11 +21,11 @@ def synthetic_laps(n_races=5, drivers=3, laps=30, seed=0, noise=0.0):
             for lap in range(2, laps + 2):
                 age = lap - 1
                 time = base + 0.05 * age - 0.03 * lap + rng.normal(0, noise)
-                rows.append((race, f"C{race}", driver, lap, 1, "MEDIUM", age, time, 30.0, 25.0,
-                             laps + 1))
-    columns = ["session_key", "circuit_short_name", "driver_number", "lap_number", "stint_number",
-               "compound", "tyre_age", "lap_duration", "track_temperature", "air_temperature",
-               "race_laps"]
+                rows.append((race, 2023 + race % 2, f"C{race}", driver, lap, 1, "MEDIUM", age,
+                             time, 30.0, 25.0, laps + 1))
+    columns = ["session_key", "season", "circuit_short_name", "driver_number", "lap_number",
+               "stint_number", "compound", "tyre_age", "lap_duration", "track_temperature",
+               "air_temperature", "race_laps"]
     return pl.DataFrame(rows, schema=columns, orient="row")
 
 
@@ -77,3 +78,11 @@ def test_bootstrap_is_deterministic_and_brackets_the_mean():
     assert first == bootstrap_ci(values, seed=1)
     mean, low, high = first
     assert low <= mean <= high
+
+
+def test_leave_one_season_out_never_trains_on_the_held_out_season():
+    examples = build_examples(synthetic_laps(noise=0.05))
+    seasons = run_leave_one_season_out(examples)
+    assert seasons["season"].to_list() == [2023, 2024]
+    assert seasons["n_laps"].sum() == examples.height
+    assert (seasons["mae_b1"] < seasons["mae_b0"]).all()

@@ -34,4 +34,6 @@ sources:
                 combination_of_columns: [session_key, driver_number]
       - name: race_control
       - name: weather
+      - name: position
+      - name: intervals
       - name: quarantine

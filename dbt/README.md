@@ -52,19 +52,22 @@ page. Question 3 (undercut base rate) is deferred.
 - Degradation slopes need at least 10 clean laps and 3 distinct tyre ages; sparse groups
   (for example one soft-tyre stint) are not reported.
 - **Estimator.** `slope_s_per_lap` is a within-stint (fixed-effects) fit; `slope_pooled_s_per_lap`
-  is the simpler pooled fit. Across 2024 they differ by more than 0.02 s/lap in 18 of 67
-  race-compound fits, so the choice matters as much as the fuel assumption. On Monza the pooled
+  is the simpler pooled fit. Across 2024 they differed by more than 0.02 s/lap in 18 of 67
+  race-compound fits (checked when the mart was built; not repeated for 2023 and 2025), so the choice matters as much as the fuel assumption. On Monza the pooled
   fit equals an earlier independent project's (MEDIUM 0.0234, HARD 0.0423 s/lap with the same
   laps and the same 0.04 assumption).
-- The lap-time model (`docs/ML-RESULTS.md`) estimates tyre-age and lap-number effects jointly: the
-  lap-number effect is -0.038 s per lap (95% CI -0.052 to -0.027), close to the assumed 0.04, but
-  the MEDIUM and HARD tyre-age slopes have intervals that include zero. Treat the mart's slopes
-  as descriptive, not as precise per-compound degradation rates.
+- The lap-time model (`docs/ML-RESULTS.md`) estimates tyre-age and lap-number effects jointly: on
+  2023 to 2025 the lap-number effect is -0.040 s per lap (95% CI -0.047 to -0.035), close to the
+  assumed 0.04; the SOFT and HARD tyre-age intervals exclude zero and the MEDIUM one does not.
+  Treat the mart's slopes as descriptive, not as precise per-compound degradation rates.
 - Both slopes are still conditional on the fuel assumption; some races (Monaco) show negative
   slopes because the track gets faster as rubber is laid down, which a per-stint fit does not model.
 
 ## Verified on 2026-11-11
 
-`dbt build` passed on both targets: 63 of 63 (1 seed, 16 models, 46 data tests), on Snowflake in
-about 35 seconds. The Monza degradation values in the mart match a separate hand computation on the
-same laps. Snowflake credits used in total so far (loads, builds, checks): 0.12 of the 10 allowed.
+`dbt build` passes on DuckDB (97 of 97) and on Snowflake (96 pass, 1 warning) with 23 models, 64 data
+tests, 2 seeds and 8 unit tests, in about 90 to 110 seconds on Snowflake. The warning lists the sessions
+whose stints disagree with their pit stops (`int_session_stint_check`, ADR 0017). The undercut models
+have hand-built golden scenarios as dbt unit tests, and an independent Python implementation
+(`scripts/check_undercut.py`) reproduces every attempt and outcome (ADR 0016). The DuckDB fixture's
+`position` and `intervals` tables are synthetic, derived from the fixture laps.

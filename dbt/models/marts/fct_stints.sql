@@ -10,6 +10,7 @@ with pit_laps as (
 select
     s.session_key,
     ses.circuit_short_name,
+    ses.year as season,
     s.driver_number,
     s.stint_number,
     s.compound,

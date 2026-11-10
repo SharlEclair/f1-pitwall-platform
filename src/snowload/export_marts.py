@@ -16,8 +16,8 @@ from snowload.load import connect
 BACKUP_DIR = Path("data/export/marts")
 APP_DIR = Path("dashboard/data")
 ALL_MARTS = ["FCT_LAPS", "FCT_STINTS", "FCT_PIT_STOPS", "MART_TYRE_DEGRADATION", "MART_PIT_LOSS",
-             "MART_DQ_HEALTH"]
-APP_MARTS = ["MART_TYRE_DEGRADATION", "MART_PIT_LOSS", "MART_DQ_HEALTH"]
+             "MART_DQ_HEALTH", "MART_UNDERCUT_EVENTS", "MART_UNDERCUT_SUMMARY"]
+APP_MARTS = ["MART_TYRE_DEGRADATION", "MART_PIT_LOSS", "MART_DQ_HEALTH", "MART_UNDERCUT_SUMMARY"]
 
 
 def to_frame(cursor, table):

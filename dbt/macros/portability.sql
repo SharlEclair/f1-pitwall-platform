@@ -32,3 +32,16 @@
 {% macro snowflake__no_flags(column) -%}
     coalesce(array_size({{ column }}), 0) = 0
 {%- endmacro %}
+
+{#- Timestamp arithmetic differs between engines: `seconds_before(ts, 10)` is ts minus 10 seconds. -#}
+{% macro seconds_before(timestamp_column, seconds) -%}
+    {{ return(adapter.dispatch('seconds_before', 'f1_pitwall')(timestamp_column, seconds)) }}
+{%- endmacro %}
+
+{% macro duckdb__seconds_before(timestamp_column, seconds) -%}
+    ({{ timestamp_column }} - to_seconds({{ seconds }}))
+{%- endmacro %}
+
+{% macro snowflake__seconds_before(timestamp_column, seconds) -%}
+    dateadd(second, -({{ seconds }}), {{ timestamp_column }})
+{%- endmacro %}

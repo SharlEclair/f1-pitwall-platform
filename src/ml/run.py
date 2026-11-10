@@ -21,6 +21,7 @@ from ml.lapmodel import (
     build_examples,
     estimate_effects,
     fit_gbm,
+    run_leave_one_season_out,
     run_loro,
 )
 
@@ -70,6 +71,7 @@ def summarise(examples, folds, predictions):
         .rows(named=True)
     )
     out["folds"] = folds.sort("mae_gbm").rows(named=True)
+    out["by_season_out"] = run_leave_one_season_out(examples).rows(named=True)
     return out
 
 
@@ -124,7 +126,18 @@ def render(results, effects, data_hash):
     lines += ["", "By race (sorted by LightGBM error):", "",
               "| Race | Laps | B0 | B1 | LightGBM |", "|---|---|---|---|---|"]
     for row in r["folds"]:
-        lines.append(f"| {row['circuit_short_name']} | {row['n_laps']} | {row['mae_b0']:.3f} | "
+        label = f"{row['circuit_short_name']} {row['season']}"
+        lines.append(f"| {label} | {row['n_laps']} | {row['mae_b0']:.3f} | "
+                     f"{row['mae_b1']:.3f} | {row['mae_gbm']:.3f} |")
+    lines += [
+        "", "## Stricter check: leave one season out", "",
+        "Circuits repeat across seasons, so leave-one-race-out can train on the same circuit in "
+        "another year. Here each season is held out whole (trained on the other seasons only). "
+        "With so few seasons no interval is given.", "",
+        "| Held-out season | Laps | B0 | B1 | LightGBM |", "|---|---|---|---|---|",
+    ]
+    for row in r["by_season_out"]:
+        lines.append(f"| {row['season']} | {row['n_laps']} | {row['mae_b0']:.3f} | "
                      f"{row['mae_b1']:.3f} | {row['mae_gbm']:.3f} |")
     slope = effects["lap_slope"]
     lines += [
@@ -143,8 +156,10 @@ def render(results, effects, data_hash):
                      f"(95% CI {s[1]:+.4f} to {s[2]:+.4f}).")
     lines += [
         "", "## Limitations", "",
-        "- One season (2024); races are not independent draws and each circuit appears once, so "
-        "the model never sees the held-out circuit.",
+        "- Races are not independent draws, and a circuit appears once per season, so "
+        "leave-one-race-out can train on the held-out circuit from another season (the model has "
+        "no circuit feature; the leave-one-season-out table is the stricter check). 2023 to 2025 "
+        "only; no claim for other regulations.",
         f"- The first {N_CAL} clean laps of a driver in a race are required, so drivers who retire "
         "early or never have enough clean laps are not scored.",
         "- Lap-number and tyre-age effects are only separately identified through differences "

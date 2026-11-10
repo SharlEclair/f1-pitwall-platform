@@ -23,6 +23,7 @@ status_reference as (
 select
     p.session_key,
     ses.circuit_short_name,
+    ses.year as season,
     p.driver_number,
     p.lap_number,
     p.date,

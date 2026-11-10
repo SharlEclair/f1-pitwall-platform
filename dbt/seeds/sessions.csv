@@ -1,4 +1,32 @@
 session_key,meeting_key,session_name,circuit_short_name,country_name,location,race_date,year
+7953,1141,Race,Sakhir,Bahrain,Sakhir,2023-03-05,2023
+7779,1142,Race,Jeddah,Saudi Arabia,Jeddah,2023-03-19,2023
+7787,1143,Race,Melbourne,Australia,Melbourne,2023-04-02,2023
+9069,1207,Sprint,Baku,Azerbaijan,Baku,2023-04-29,2023
+9070,1207,Race,Baku,Azerbaijan,Baku,2023-04-30,2023
+9078,1208,Race,Miami,United States,Miami,2023-05-07,2023
+9094,1210,Race,Monte Carlo,Monaco,Monaco,2023-05-28,2023
+9102,1211,Race,Catalunya,Spain,Barcelona,2023-06-04,2023
+9110,1212,Race,Montreal,Canada,Montréal,2023-06-18,2023
+9117,1213,Sprint,Spielberg,Austria,Spielberg,2023-07-01,2023
+9118,1213,Race,Spielberg,Austria,Spielberg,2023-07-02,2023
+9126,1214,Race,Silverstone,United Kingdom,Silverstone,2023-07-09,2023
+9133,1215,Race,Hungaroring,Hungary,Budapest,2023-07-23,2023
+9140,1216,Sprint,Spa-Francorchamps,Belgium,Spa-Francorchamps,2023-07-29,2023
+9141,1216,Race,Spa-Francorchamps,Belgium,Spa-Francorchamps,2023-07-30,2023
+9149,1217,Race,Zandvoort,Netherlands,Zandvoort,2023-08-27,2023
+9157,1218,Race,Monza,Italy,Monza,2023-09-03,2023
+9165,1219,Race,Singapore,Singapore,Marina Bay,2023-09-17,2023
+9173,1220,Race,Suzuka,Japan,Suzuka,2023-09-24,2023
+9220,1221,Sprint,Lusail,Qatar,Lusail,2023-10-07,2023
+9221,1221,Race,Lusail,Qatar,Lusail,2023-10-08,2023
+9212,1222,Sprint,Austin,United States,Austin,2023-10-21,2023
+9213,1222,Race,Austin,United States,Austin,2023-10-22,2023
+9181,1223,Race,Mexico City,Mexico,Mexico City,2023-10-29,2023
+9204,1224,Sprint,Interlagos,Brazil,São Paulo,2023-11-04,2023
+9205,1224,Race,Interlagos,Brazil,São Paulo,2023-11-05,2023
+9189,1225,Race,Las Vegas,United States,Las Vegas,2023-11-19,2023
+9197,1226,Race,Yas Marina Circuit,United Arab Emirates,Yas Island,2023-11-26,2023
 9472,1229,Race,Sakhir,Bahrain,Sakhir,2024-03-02,2024
 9480,1230,Race,Jeddah,Saudi Arabia,Jeddah,2024-03-09,2024
 9488,1231,Race,Melbourne,Australia,Melbourne,2024-03-24,2024
@@ -29,3 +57,33 @@ session_key,meeting_key,session_name,circuit_short_name,country_name,location,ra
 9654,1251,Sprint,Lusail,Qatar,Lusail,2024-11-30,2024
 9655,1251,Race,Lusail,Qatar,Lusail,2024-12-01,2024
 9662,1252,Race,Yas Marina Circuit,United Arab Emirates,Yas Island,2024-12-08,2024
+9693,1254,Race,Melbourne,Australia,Melbourne,2025-03-16,2025
+9993,1255,Sprint,Shanghai,China,Shanghai,2025-03-22,2025
+9998,1255,Race,Shanghai,China,Shanghai,2025-03-23,2025
+10006,1256,Race,Suzuka,Japan,Suzuka,2025-04-06,2025
+10014,1257,Race,Sakhir,Bahrain,Sakhir,2025-04-13,2025
+10022,1258,Race,Jeddah,Saudi Arabia,Jeddah,2025-04-20,2025
+10028,1259,Sprint,Miami,United States,Miami Gardens,2025-05-03,2025
+10033,1259,Race,Miami,United States,Miami Gardens,2025-05-04,2025
+9987,1260,Race,Imola,Italy,Imola,2025-05-18,2025
+9979,1261,Race,Monte Carlo,Monaco,Monaco,2025-05-25,2025
+9971,1262,Race,Catalunya,Spain,Barcelona,2025-06-01,2025
+9963,1263,Race,Montreal,Canada,Montréal,2025-06-15,2025
+9955,1264,Race,Spielberg,Austria,Spielberg,2025-06-29,2025
+9947,1277,Race,Silverstone,United Kingdom,Silverstone,2025-07-06,2025
+9934,1265,Sprint,Spa-Francorchamps,Belgium,Spa-Francorchamps,2025-07-26,2025
+9939,1265,Race,Spa-Francorchamps,Belgium,Spa-Francorchamps,2025-07-27,2025
+9928,1266,Race,Hungaroring,Hungary,Budapest,2025-08-03,2025
+9920,1267,Race,Zandvoort,Netherlands,Zandvoort,2025-08-31,2025
+9912,1268,Race,Monza,Italy,Monza,2025-09-07,2025
+9904,1269,Race,Baku,Azerbaijan,Baku,2025-09-21,2025
+9896,1270,Race,Singapore,Singapore,Marina Bay,2025-10-05,2025
+9883,1271,Sprint,Austin,United States,Austin,2025-10-18,2025
+9888,1271,Race,Austin,United States,Austin,2025-10-19,2025
+9877,1272,Race,Mexico City,Mexico,Mexico City,2025-10-26,2025
+9864,1273,Sprint,Interlagos,Brazil,São Paulo,2025-11-08,2025
+9869,1273,Race,Interlagos,Brazil,São Paulo,2025-11-09,2025
+9858,1274,Race,Las Vegas,United States,Las Vegas,2025-11-23,2025
+9845,1275,Sprint,Lusail,Qatar,Lusail,2025-11-29,2025
+9850,1275,Race,Lusail,Qatar,Lusail,2025-11-30,2025
+9839,1276,Race,Yas Marina Circuit,United Arab Emirates,Yas Island,2025-12-07,2025

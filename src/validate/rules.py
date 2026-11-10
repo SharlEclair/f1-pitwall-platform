@@ -53,11 +53,32 @@ RULES = [
          "Compound is UNKNOWN",
          "Valid API value, but unusable for compound degradation"),
     Rule("DQ-PIT-001", "pit", "flag",
-         "pit_duration over 60 s",
+         "lane_duration over 60 s",
          "Red-flag waits and long stops would distort pit-loss estimates"),
     Rule("DQ-PIT-002", "pit", "warn",
          "stop_duration is null",
          "Stationary time is only published for some sessions (ADR 0004)"),
+    Rule("DQ-POS-001", "position", "reject",
+         "Position is not a whole number from 1 to 22",
+         "The grid has at most 22 cars; anything else is a corrupt value (ADR 0015)"),
+    Rule("DQ-POS-002", "position", "reject",
+         "More than one position row for the same driver at the same timestamp",
+         "Position is an event stream: two values at one instant cannot both be the order"),
+    Rule("DQ-POS-003", "position", "reject",
+         "Driver number is not in the session's drivers",
+         "An unknown driver cannot be joined to laps or stints"),
+    Rule("DQ-POS-004", "position", "flag",
+         "Two or more drivers hold the same position for more than 10 s",
+         "A race order is a permutation; a lasting duplicate means a missed update"),
+    Rule("DQ-INT-001", "interval", "reject",
+         "interval or gap_to_leader is not a number, null or text like '+1 LAP'",
+         "Unexpected types break typed loads and gap arithmetic"),
+    Rule("DQ-INT-002", "interval", "reject",
+         "interval or gap_to_leader is negative",
+         "A gap to the car ahead or the leader cannot be negative"),
+    Rule("DQ-INT-003", "interval", "flag",
+         "gap_to_leader is smaller than interval",
+         "The gap to the leader cannot be smaller than the gap to the car ahead"),
     Rule("DQ-SESS-001", "driver", "reject",
          "Driver number is mapped to more than one team in a session",
          "Ambiguous driver identity breaks joins"),
@@ -73,7 +94,11 @@ REGISTRY = {rule.code: rule for rule in RULES}
 
 KNOWN_COMPOUNDS = {"SOFT", "MEDIUM", "HARD", "INTERMEDIATE", "WET", "UNKNOWN"}
 
-# Field sets observed identically across all 30 ingested 2024 sessions.
+# Fields OpenF1 documents as deprecated and to be removed at the end of the 2026 season. They stay
+# accepted when present but are no longer required, so their removal does not quarantine every row.
+OPTIONAL_FIELDS = {"pit": {"pit_duration"}, "drivers": {"country_code"}}
+
+# Field sets observed identically across all ingested 2023 to 2025 sessions.
 EXPECTED_FIELDS = {
     "laps": {
         "meeting_key", "session_key", "driver_number", "lap_number", "date_start",
@@ -88,6 +113,10 @@ EXPECTED_FIELDS = {
     "pit": {
         "date", "session_key", "stop_duration", "lap_number", "lane_duration", "meeting_key",
         "driver_number", "pit_duration",
+    },
+    "position": {"date", "session_key", "meeting_key", "driver_number", "position"},
+    "intervals": {
+        "date", "session_key", "meeting_key", "driver_number", "interval", "gap_to_leader",
     },
     "drivers": {
         "meeting_key", "session_key", "driver_number", "broadcast_name", "full_name",

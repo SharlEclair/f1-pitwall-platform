@@ -55,7 +55,7 @@ models:
           arguments:
             compare_model: source('raw', 'pit')
     columns:
-      - name: pit_duration
+      - name: lane_duration
         data_tests: [not_null]
 
   - name: stg_drivers
@@ -76,6 +76,52 @@ models:
           arguments:
             compare_model: source('raw', 'race_control')
 
+  - name: stg_position
+    description: Race position events (an event stream, not one row per lap).
+    data_tests:
+      - dbt_utils.equal_rowcount:
+          arguments:
+            compare_model: source('raw', 'position')
+      - dbt_utils.unique_combination_of_columns:
+          arguments:
+            combination_of_columns: [session_key, driver_number, date]
+    columns:
+      - name: race_position
+        data_tests:
+          - not_null
+          - dbt_utils.accepted_range:
+              arguments:
+                min_value: 1
+                max_value: 22
+      - name: session_key
+        data_tests:
+          - not_null
+          - relationships:
+              arguments:
+                to: ref('stg_sessions')
+                field: session_key
+
+  - name: stg_intervals
+    description: Gap to the car ahead and to the leader (about every 4 s per driver).
+    data_tests:
+      - dbt_utils.equal_rowcount:
+          arguments:
+            compare_model: source('raw', 'intervals')
+    columns:
+      - name: session_key
+        data_tests:
+          - not_null
+          - relationships:
+              arguments:
+                to: ref('stg_sessions')
+                field: session_key
+      - name: interval_s
+        data_tests:
+          - dbt_utils.accepted_range:
+              arguments:
+                min_value: 0
+                where: "interval_s is not null"
+
   - name: stg_quarantine
     columns:
       - name: rule_code
@@ -89,6 +135,11 @@ models:
                   - DQ-LAP-001
                   - DQ-LAP-002
                   - DQ-LAP-005
+                  - DQ-POS-001
+                  - DQ-POS-002
+                  - DQ-POS-003
+                  - DQ-INT-001
+                  - DQ-INT-002
                   - DQ-STINT-001
                   - DQ-STINT-003
                   - DQ-SESS-001

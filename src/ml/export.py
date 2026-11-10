@@ -15,7 +15,7 @@ from snowload.load import connect
 
 QUERY = """
 select
-    l.session_key, l.circuit_short_name, l.driver_number, l.lap_number, l.stint_number,
+    l.session_key, l.season, l.circuit_short_name, l.driver_number, l.lap_number, l.stint_number,
     l.compound, l.tyre_age, l.lap_duration, l.track_temperature, l.air_temperature,
     r.race_laps
 from MARTS.FCT_LAPS as l
@@ -29,9 +29,9 @@ where l.is_clean_lap
 order by l.session_key, l.driver_number, l.lap_number
 """
 
-COLUMNS = ["session_key", "circuit_short_name", "driver_number", "lap_number", "stint_number",
-           "compound", "tyre_age", "lap_duration", "track_temperature", "air_temperature",
-           "race_laps"]
+COLUMNS = ["session_key", "season", "circuit_short_name", "driver_number", "lap_number",
+           "stint_number", "compound", "tyre_age", "lap_duration", "track_temperature",
+           "air_temperature", "race_laps"]
 
 
 def export(path):
@@ -39,8 +39,8 @@ def export(path):
         rows = conn.cursor().execute(QUERY).fetchall()
     frame = pl.DataFrame(rows, schema=COLUMNS, orient="row", infer_schema_length=None)
     frame = frame.with_columns(
-        pl.col("session_key", "driver_number", "lap_number", "stint_number", "tyre_age",
-               "race_laps").cast(pl.Int64),
+        pl.col("session_key", "season", "driver_number", "lap_number", "stint_number",
+               "tyre_age", "race_laps").cast(pl.Int64),
         pl.col("lap_duration", "track_temperature", "air_temperature").cast(pl.Float64),
     )
     Path(path).parent.mkdir(parents=True, exist_ok=True)

@@ -121,7 +121,8 @@ def run_loro(examples):
         b1 = fit_b1(train)
         gbm = fit_gbm(train)
         predictions.append(test.select(
-            "session_key", "circuit_short_name", "driver_number", "lap_number", "compound",
+            "session_key", "season", "circuit_short_name", "driver_number", "lap_number",
+            "compound",
             "lap_diff", pl.col("lap_duration").alias("actual"),
             pl.col("cal_median").alias("pred_b0"),
             pl.Series("pred_b1", predict_b1(b1, test)),
@@ -129,7 +130,7 @@ def run_loro(examples):
         ))
     predictions = pl.concat(predictions)
     folds = (
-        predictions.group_by("session_key", "circuit_short_name")
+        predictions.group_by("session_key", "season", "circuit_short_name")
         .agg(
             pl.len().alias("n_laps"),
             *[(pl.col(f"pred_{m}") - pl.col("actual")).abs().mean().alias(f"mae_{m}")
@@ -138,6 +139,24 @@ def run_loro(examples):
         .sort("session_key")
     )
     return folds, predictions
+
+
+def run_leave_one_season_out(examples):
+    """Stricter check: train on all other seasons, score the held-out season (circuits repeat
+    across seasons, so leave-one-race-out lets the model see the same circuit in another year).
+    Returns one row per season; with only a few seasons no interval is meaningful."""
+    rows = []
+    for season in sorted(examples["season"].unique().to_list()):
+        train = examples.filter(pl.col("season") != season)
+        test = examples.filter(pl.col("season") == season)
+        assert season not in set(train["season"].to_list())
+        b1, gbm = fit_b1(train), fit_gbm(train)
+        actual = test["lap_duration"].to_numpy()
+        preds = {"b0": test["cal_median"].to_numpy(), "b1": predict_b1(b1, test),
+                 "gbm": predict_gbm(gbm, test)}
+        rows.append({"season": season, "n_laps": test.height,
+                     **{f"mae_{m}": float(np.abs(p - actual).mean()) for m, p in preds.items()}})
+    return pl.DataFrame(rows)
 
 
 def bootstrap_ci(values, n_boot=2000, seed=0, alpha=0.05):

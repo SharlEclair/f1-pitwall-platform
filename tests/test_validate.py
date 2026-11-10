@@ -46,7 +46,7 @@ def test_rejected_row_is_quarantined_with_code_and_pointer_not_in_silver():
 
 
 def test_flagged_row_stays_in_silver_with_its_code():
-    session = expand_case({"pit": [{"pit_duration": 2390.0}]})
+    session = expand_case({"pit": [{"lane_duration": 2390.0}]})
     result = validate_session(1, session)
     assert result.silver["pit"].height == 1
     assert result.silver["pit"]["dq_flags"][0].to_list() == ["DQ-PIT-001"]
@@ -118,3 +118,26 @@ def test_freshness_flags_only_old_unfinished_ingests():
     sessions = [s(1, "2026-11-01T15:00:00+00:00"), s(2, "2026-11-01T15:00:00+00:00"),
                 s(3, "2026-11-09T15:00:00+00:00"), s(4, "2026-11-01T15:00:00+00:00", "Qualifying")]
     assert freshness_warnings(sessions, {2}, now, hours=48) == [1]
+
+
+def test_interval_text_becomes_laps_down_not_a_number():
+    session = expand_case({"intervals": [
+        {"driver_number": 2, "interval": 1.5, "gap_to_leader": "+1 LAP"},
+        {"driver_number": 1},
+    ]})
+    frame = validate_session(1, session).silver["intervals"].sort("driver_number")
+    assert frame["interval_s"].to_list() == [None, 1.5]
+    assert frame["gap_to_leader_s"].to_list() == [None, None]
+    assert frame["laps_down"].to_list() == [None, 1]
+
+
+def test_position_silver_uses_keyword_safe_column_name():
+    frame = validate_session(1, baseline_session()).silver["position"].sort("driver_number")
+    assert frame["race_position"].to_list() == [1, 2]
+
+
+def test_deprecated_fields_may_be_absent_without_quarantining_the_row():
+    session = expand_case({"pit": [{"_drop": ["pit_duration"]}]})
+    result = validate_session(1, session)
+    assert result.quarantine.height == 0
+    assert result.silver["pit"]["pit_duration"].to_list() == [None]

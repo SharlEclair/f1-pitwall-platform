@@ -1,0 +1,170 @@
+version: 2
+
+# Golden undercut events: small hand-built races whose answer is known by construction. They check
+# the SQL of the candidate and outcome models on both engines without any real OpenF1 rows.
+# A is the car that stops first; B is directly ahead of A when A's in-lap begins.
+
+unit_tests:
+  - name: candidate_with_gap_and_response_is_found
+    model: int_undercut_candidates
+    given:
+      - input: ref('fct_pit_stops')
+        rows:
+          - {session_key: 1, season: 2024, circuit_short_name: Test, driver_number: 1, lap_number: 10, is_long_stop: false, track_status_at_pit: GREEN}
+          - {session_key: 1, season: 2024, circuit_short_name: Test, driver_number: 2, lap_number: 11, is_long_stop: false, track_status_at_pit: GREEN}
+      - input: ref('fct_laps')
+        rows:
+          - {session_key: 1, driver_number: 1, lap_number: 10, date_start: "2024-01-01 10:10:00+00", track_status: GREEN}
+          - {session_key: 1, driver_number: 2, lap_number: 11, date_start: "2024-01-01 10:11:00+00", track_status: GREEN}
+          - {session_key: 1, driver_number: 1, lap_number: 11, date_start: "2024-01-01 10:11:20+00", track_status: GREEN}
+      - input: ref('stg_position')
+        rows:
+          - {session_key: 1, driver_number: 2, date: "2024-01-01 10:00:00+00", race_position: 1}
+          - {session_key: 1, driver_number: 1, date: "2024-01-01 10:00:00+00", race_position: 2}
+      - input: ref('stg_intervals')
+        rows:
+          - {session_key: 1, driver_number: 1, date: "2024-01-01 10:09:58+00", interval_s: 1.5, laps_down: null}
+    expect:
+      rows:
+        - {session_key: 1, a_driver: 1, b_driver: 2, stop_lap: 10, a_position: 2, b_position: 1, gap_s: 1.5, b_stop_lap: 11, response_laps: 1, b_stopped_same_or_previous_lap: false, neutralised_in_window: false}
+
+  - name: stale_gap_is_unknown_not_imputed
+    model: int_undercut_candidates
+    given:
+      - input: ref('fct_pit_stops')
+        rows:
+          - {session_key: 1, season: 2024, circuit_short_name: Test, driver_number: 1, lap_number: 10, is_long_stop: false, track_status_at_pit: GREEN}
+      - input: ref('fct_laps')
+        rows:
+          - {session_key: 1, driver_number: 1, lap_number: 10, date_start: "2024-01-01 10:10:00+00", track_status: GREEN}
+      - input: ref('stg_position')
+        rows:
+          - {session_key: 1, driver_number: 2, date: "2024-01-01 10:00:00+00", race_position: 1}
+          - {session_key: 1, driver_number: 1, date: "2024-01-01 10:00:00+00", race_position: 2}
+      - input: ref('stg_intervals')
+        rows:
+          - {session_key: 1, driver_number: 1, date: "2024-01-01 10:09:30+00", interval_s: 1.5, laps_down: null}
+    expect:
+      rows:
+        - {session_key: 1, a_driver: 1, b_driver: 2, stop_lap: 10, gap_s: null, b_stop_lap: null}
+
+  - name: safety_car_lap_in_window_is_marked_neutralised
+    model: int_undercut_candidates
+    given:
+      - input: ref('fct_pit_stops')
+        rows:
+          - {session_key: 1, season: 2024, circuit_short_name: Test, driver_number: 1, lap_number: 10, is_long_stop: false, track_status_at_pit: GREEN}
+          - {session_key: 1, season: 2024, circuit_short_name: Test, driver_number: 2, lap_number: 12, is_long_stop: false, track_status_at_pit: SC}
+      - input: ref('fct_laps')
+        rows:
+          - {session_key: 1, driver_number: 1, lap_number: 10, date_start: "2024-01-01 10:10:00+00", track_status: GREEN}
+          - {session_key: 1, driver_number: 2, lap_number: 11, date_start: "2024-01-01 10:11:00+00", track_status: SC}
+      - input: ref('stg_position')
+        rows:
+          - {session_key: 1, driver_number: 2, date: "2024-01-01 10:00:00+00", race_position: 1}
+          - {session_key: 1, driver_number: 1, date: "2024-01-01 10:00:00+00", race_position: 2}
+      - input: ref('stg_intervals')
+        rows:
+          - {session_key: 1, driver_number: 1, date: "2024-01-01 10:09:58+00", interval_s: 1.0, laps_down: null}
+    expect:
+      rows:
+        - {session_key: 1, a_driver: 1, b_driver: 2, stop_lap: 10, b_stop_lap: 12, neutralised_in_window: true}
+
+  - name: the_car_directly_ahead_is_the_one_one_place_up_not_the_leader
+    model: int_undercut_candidates
+    given:
+      - input: ref('fct_pit_stops')
+        rows:
+          - {session_key: 1, season: 2024, circuit_short_name: Test, driver_number: 3, lap_number: 10, is_long_stop: false, track_status_at_pit: GREEN}
+      - input: ref('fct_laps')
+        rows:
+          - {session_key: 1, driver_number: 3, lap_number: 10, date_start: "2024-01-01 10:10:00+00", track_status: GREEN}
+      - input: ref('stg_position')
+        rows:
+          - {session_key: 1, driver_number: 1, date: "2024-01-01 10:00:00+00", race_position: 1}
+          - {session_key: 1, driver_number: 2, date: "2024-01-01 10:00:00+00", race_position: 2}
+          - {session_key: 1, driver_number: 3, date: "2024-01-01 10:00:00+00", race_position: 3}
+          - {session_key: 1, driver_number: 1, date: "2024-01-01 10:20:00+00", race_position: 3}
+      - input: ref('stg_intervals')
+        rows:
+          - {session_key: 1, driver_number: 3, date: "2024-01-01 10:09:59+00", interval_s: 0.8, laps_down: null}
+    expect:
+      rows:
+        - {session_key: 1, a_driver: 3, b_driver: 2, a_position: 3, b_position: 2, gap_s: 0.8}
+
+  - name: success_when_a_is_ahead_of_b_after_both_stops
+    model: int_undercut_outcomes
+    given:
+      - input: ref('int_undercut_candidates')
+        rows:
+          - {session_key: 1, a_driver: 1, b_driver: 2, stop_lap: 10, b_stop_lap: 11}
+      - input: ref('fct_laps')
+        rows:
+          - {session_key: 1, driver_number: 2, lap_number: 13, date_start: "2024-01-01 10:20:00+00"}
+          - {session_key: 1, driver_number: 1, lap_number: 13, date_start: "2024-01-01 10:20:05+00"}
+      - input: ref('stg_position')
+        rows:
+          - {session_key: 1, driver_number: 2, date: "2024-01-01 10:00:00+00", race_position: 1}
+          - {session_key: 1, driver_number: 1, date: "2024-01-01 10:00:00+00", race_position: 2}
+          - {session_key: 1, driver_number: 1, date: "2024-01-01 10:12:00+00", race_position: 1}
+          - {session_key: 1, driver_number: 2, date: "2024-01-01 10:12:00+00", race_position: 2}
+    expect:
+      rows:
+        - {session_key: 1, a_driver: 1, stop_lap: 10, a_position_at_evaluation: 1, b_position_at_evaluation: 2, outcome: success}
+
+  - name: failure_when_b_stays_ahead_and_later_events_are_ignored
+    model: int_undercut_outcomes
+    given:
+      - input: ref('int_undercut_candidates')
+        rows:
+          - {session_key: 1, a_driver: 1, b_driver: 2, stop_lap: 10, b_stop_lap: 11}
+      - input: ref('fct_laps')
+        rows:
+          - {session_key: 1, driver_number: 2, lap_number: 13, date_start: "2024-01-01 10:20:00+00"}
+          - {session_key: 1, driver_number: 1, lap_number: 13, date_start: "2024-01-01 10:20:05+00"}
+      - input: ref('stg_position')
+        rows:
+          - {session_key: 1, driver_number: 2, date: "2024-01-01 10:00:00+00", race_position: 1}
+          - {session_key: 1, driver_number: 1, date: "2024-01-01 10:00:00+00", race_position: 2}
+          - {session_key: 1, driver_number: 1, date: "2024-01-01 10:30:00+00", race_position: 1}
+          - {session_key: 1, driver_number: 2, date: "2024-01-01 10:30:00+00", race_position: 2}
+    expect:
+      rows:
+        - {session_key: 1, a_driver: 1, stop_lap: 10, a_position_at_evaluation: 2, b_position_at_evaluation: 1, outcome: failure}
+
+  - name: inconclusive_when_a_has_no_lap_at_the_evaluation_instant
+    model: int_undercut_outcomes
+    given:
+      - input: ref('int_undercut_candidates')
+        rows:
+          - {session_key: 1, a_driver: 1, b_driver: 2, stop_lap: 10, b_stop_lap: 11}
+      - input: ref('fct_laps')
+        rows:
+          - {session_key: 1, driver_number: 2, lap_number: 13, date_start: "2024-01-01 10:20:00+00"}
+      - input: ref('stg_position')
+        rows:
+          - {session_key: 1, driver_number: 2, date: "2024-01-01 10:00:00+00", race_position: 1}
+          - {session_key: 1, driver_number: 1, date: "2024-01-01 10:00:00+00", race_position: 2}
+    expect:
+      rows:
+        - {session_key: 1, a_driver: 1, stop_lap: 10, outcome: inconclusive}
+
+  - name: tied_positions_make_the_car_ahead_ambiguous_so_there_is_no_candidate
+    model: int_undercut_candidates
+    given:
+      - input: ref('fct_pit_stops')
+        rows:
+          - {session_key: 1, season: 2024, circuit_short_name: Test, driver_number: 3, lap_number: 10, is_long_stop: false, track_status_at_pit: GREEN}
+      - input: ref('fct_laps')
+        rows:
+          - {session_key: 1, driver_number: 3, lap_number: 10, date_start: "2024-01-01 10:10:00+00", track_status: GREEN}
+      - input: ref('stg_position')
+        rows:
+          - {session_key: 1, driver_number: 1, date: "2024-01-01 10:00:00+00", race_position: 2}
+          - {session_key: 1, driver_number: 2, date: "2024-01-01 10:00:00+00", race_position: 2}
+          - {session_key: 1, driver_number: 3, date: "2024-01-01 10:00:00+00", race_position: 3}
+      - input: ref('stg_intervals')
+        rows:
+          - {session_key: 1, driver_number: 3, date: "2024-01-01 10:09:59+00", interval_s: 0.8, laps_down: null}
+    expect:
+      rows: []
