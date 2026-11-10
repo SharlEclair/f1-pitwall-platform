@@ -65,7 +65,7 @@ Sample kept outside the repo (scratchpad); only a tiny fixture will be committed
 | DQ-STINT-002 | stint | last stint ends before driver's last lap | flag | driver 22 |
 | DQ-STINT-003 | stint | compound outside known set | reject | guard |
 | DQ-PIT-001 | pit | `pit_duration` > 60 s (red-flag wait) | flag | Monaco ~2390 s |
-| DQ-PIT-002 | pit | `stop_duration` null | warn | all 2024 rows |
+| DQ-PIT-002 | pit | `stop_duration` null | warn | Monza and Monaco samples; 714 of 865 stops in 2024 |
 | DQ-SESS-001 | session | driver number maps to 2 teams | reject | guard |
 | DQ-API-001 | response | schema drift: missing/unexpected fields | reject | ingest |
 | DQ-FRESH-001 | session | completed session not ingested after N hours | warn | future sessions listed |
@@ -74,7 +74,7 @@ Every rule gets a good/bad golden fixture. Rule precision is measured on the 24 
 ## Architecture changes vs the sketch (to be ADRs)
 1. Raw S3 key: `raw/season=/session_key=/endpoint=/{content_sha256}.json` plus a small manifest, not an ingest timestamp in the path, so a re-run with unchanged content is a true no-op and a corrected response is a new immutable object.
 2. Skip sessions whose `date_end` is in the future or older than the ingest cursor; off-season runs do nothing and report it.
-3. Pit-loss mart uses lane duration; flags red-flag pit stops; excludes them from loss estimates. `stop_duration` only from 2025 (ADR).
+3. Pit-loss mart uses lane duration; flags red-flag pit stops; excludes them from loss estimates. `stop_duration` is populated only from the 2024 US Grand Prix onwards (OpenF1 docs; 151 of 865 stops in 2024, see ADR 0004).
 4. Track-status per lap derived from `race_control` flags, with the rule that lap_number-null rows are ignored and flagged.
 5. Lambda #2 container image needs an ECR repo; SAM manages it, with a lifecycle policy; teardown script checks for leftovers.
 
@@ -119,7 +119,7 @@ Kafka, Airflow, Kubernetes, Terraform, streaming/real-time, `car_data`/`location
 - Maintainer: AWS and Snowflake accounts, MFA, billing, credentials/keys, GitHub repo creation and OIDC trust confirmation, Power BI Desktop, making the repo public, approving anything that costs money.
 
 ## ADRs to write on approval
-0002 raw key by content hash + idempotency; 0003 skip future sessions / freshness; 0004 pit-loss from lane_duration (stop_duration null in 2024); 0005 DQ severities and flag-vs-reject; 0006 quarantine in S3 + Snowflake; 0007 versions pinned (dbt trio) and DuckDB portability policy; 0008 dashboard = Power BI + Streamlit, repo private then public MIT.
+0002 raw key by content hash + idempotency; 0003 skip future sessions / freshness; 0004 pit-loss from lane_duration (stop_duration mostly null in 2024); 0005 DQ severities and flag-vs-reject; 0006 quarantine in S3 + Snowflake; 0007 versions pinned (dbt trio) and DuckDB portability policy; 0008 dashboard = Power BI + Streamlit, repo private then public MIT.
 
 ## Verification of this plan
 Each milestone's "done when" is the test. 

@@ -81,6 +81,8 @@ and Safety Car and VSC share one category and must be told apart from message te
   methods disagree and neither is validated.
 - The lap-time model covers dry running only: it uses 23 of the 24 races because Interlagos (wet) is
   excluded entirely, and Montreal, Silverstone and Catalunya lose their rain-affected laps.
+- The Snowflake loader skips a file whose name it has already loaded, so a changed file of the same
+  name is not replaced unless you run it with `--full-refresh`; `reconcile` detects a stale load.
 - The reasoning behind each choice, including the ones that did not work out, is in [docs/adr/](docs/adr/).
 
 ## Run it
