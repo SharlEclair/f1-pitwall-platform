@@ -30,16 +30,6 @@ dbt/logs/
 *.duckdb
 *.duckdb.wal
 
-# local-only working files (kept on disk, never published)
-docs/CANDIDATE-CONTEXT.md
-CLAUDE.md
-PROGRESS.md
-prompts/
-docs/PROJECT-BRIEF.md
-docs/GOALS.md
-docs/OPEN-QUESTIONS.md
-docs/ROADMAP.md
-
 # data (commit only small fixtures under dbt/fixtures and the aggregated tables in dashboard/data)
 /data/
 /raw/
