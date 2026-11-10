@@ -1,0 +1,47 @@
+name: ci
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+
+permissions:
+  contents: read
+
+env:
+  AWS_DEFAULT_REGION: ap-southeast-2
+  MLFLOW_DISABLE_AGENT_HINT: "1"
+
+jobs:
+  checks:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.13"
+          cache: pip
+
+      - name: Install pinned dependencies
+        run: pip install -r requirements.txt
+
+      - name: Lint
+        run: ruff check .
+
+      - name: Python tests
+        run: pytest -q
+
+      - uses: aws-actions/setup-sam@v2
+        with:
+          use-installer: true
+
+      - name: Validate the SAM template (offline, no AWS credentials)
+        run: sam validate --lint --template-file infra/template.yaml
+
+      - name: dbt build on the DuckDB fixture
+        working-directory: dbt
+        run: |
+          mkdir -p target
+          dbt deps --profiles-dir .
+          dbt build --profiles-dir . --target duckdb

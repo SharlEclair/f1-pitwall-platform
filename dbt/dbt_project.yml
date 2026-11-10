@@ -1,0 +1,38 @@
+name: f1_pitwall
+version: "0.1.0"
+config-version: 2
+profile: f1_pitwall
+
+model-paths: ["models"]
+seed-paths: ["seeds"]
+test-paths: ["tests"]
+macro-paths: ["macros"]
+target-path: "target"
+clean-targets: ["target", "dbt_packages"]
+
+vars:
+  # Assumption, not a measurement: seconds a lap gets faster for each lap of fuel burned.
+  # Carried over from earlier F1 work; M5 estimates it from data and reports sensitivity.
+  fuel_effect_s_per_lap: 0.04
+  # Minimum clean laps (and distinct tyre ages) before a degradation slope is reported.
+  min_laps_for_slope: 10
+
+seeds:
+  f1_pitwall:
+    sessions:
+      +column_types:
+        session_key: integer
+        meeting_key: integer
+        year: integer
+
+models:
+  f1_pitwall:
+    staging:
+      +materialized: view
+      +schema: staging
+    intermediate:
+      +materialized: view
+      +schema: intermediate
+    marts:
+      +materialized: table
+      +schema: marts

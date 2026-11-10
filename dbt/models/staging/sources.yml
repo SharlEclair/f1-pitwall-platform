@@ -1,0 +1,37 @@
+version: 2
+
+sources:
+  - name: raw
+    description: >
+      Validated Parquet loaded by the Python loader (Snowflake schema RAW). On DuckDB the same
+      tables are read from the committed fixture files, so CI does not need Snowflake.
+    schema: raw
+    meta:
+      external_location: "fixtures/raw/{name}.parquet"
+    tables:
+      - name: laps
+        columns:
+          - name: session_key
+            data_tests: [not_null]
+          - name: driver_number
+            data_tests: [not_null]
+          - name: lap_number
+            data_tests: [not_null]
+        data_tests:
+          - dbt_utils.unique_combination_of_columns:
+              arguments:
+                combination_of_columns: [session_key, driver_number, lap_number]
+      - name: stints
+        data_tests:
+          - dbt_utils.unique_combination_of_columns:
+              arguments:
+                combination_of_columns: [session_key, driver_number, stint_number]
+      - name: pit
+      - name: drivers
+        data_tests:
+          - dbt_utils.unique_combination_of_columns:
+              arguments:
+                combination_of_columns: [session_key, driver_number]
+      - name: race_control
+      - name: weather
+      - name: quarantine

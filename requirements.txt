@@ -1,0 +1,9 @@
+dbt-core==1.12.6
+dbt-snowflake==1.12.5
+dbt-duckdb==1.11.1
+polars==2.1.0
+lightgbm==4.7.0
+mlflow==3.18.0
+streamlit==1.67.0
+ruff==0.17.4
+pytest==9.2.0

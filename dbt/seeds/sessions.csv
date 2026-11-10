@@ -1,0 +1,31 @@
+session_key,meeting_key,session_name,circuit_short_name,country_name,location,race_date,year
+9472,1229,Race,Sakhir,Bahrain,Sakhir,2024-03-02,2024
+9480,1230,Race,Jeddah,Saudi Arabia,Jeddah,2024-03-09,2024
+9488,1231,Race,Melbourne,Australia,Melbourne,2024-03-24,2024
+9496,1232,Race,Suzuka,Japan,Suzuka,2024-04-07,2024
+9672,1233,Sprint,Shanghai,China,Shanghai,2024-04-20,2024
+9673,1233,Race,Shanghai,China,Shanghai,2024-04-21,2024
+9506,1234,Sprint,Miami,United States,Miami,2024-05-04,2024
+9507,1234,Race,Miami,United States,Miami,2024-05-05,2024
+9515,1235,Race,Imola,Italy,Imola,2024-05-19,2024
+9523,1236,Race,Monte Carlo,Monaco,Monaco,2024-05-26,2024
+9531,1237,Race,Montreal,Canada,Montréal,2024-06-09,2024
+9539,1238,Race,Catalunya,Spain,Barcelona,2024-06-23,2024
+9549,1239,Sprint,Spielberg,Austria,Spielberg,2024-06-29,2024
+9550,1239,Race,Spielberg,Austria,Spielberg,2024-06-30,2024
+9558,1240,Race,Silverstone,United Kingdom,Silverstone,2024-07-07,2024
+9566,1241,Race,Hungaroring,Hungary,Budapest,2024-07-21,2024
+9574,1242,Race,Spa-Francorchamps,Belgium,Spa-Francorchamps,2024-07-28,2024
+9582,1243,Race,Zandvoort,Netherlands,Zandvoort,2024-08-25,2024
+9590,1244,Race,Monza,Italy,Monza,2024-09-01,2024
+9598,1245,Race,Baku,Azerbaijan,Baku,2024-09-15,2024
+9606,1246,Race,Singapore,Singapore,Marina Bay,2024-09-22,2024
+9616,1247,Sprint,Austin,United States,Austin,2024-10-19,2024
+9617,1247,Race,Austin,United States,Austin,2024-10-20,2024
+9625,1248,Race,Mexico City,Mexico,Mexico City,2024-10-27,2024
+9635,1249,Sprint,Interlagos,Brazil,São Paulo,2024-11-02,2024
+9636,1249,Race,Interlagos,Brazil,São Paulo,2024-11-03,2024
+9644,1250,Race,Las Vegas,United States,Las Vegas,2024-11-24,2024
+9654,1251,Sprint,Lusail,Qatar,Lusail,2024-11-30,2024
+9655,1251,Race,Lusail,Qatar,Lusail,2024-12-01,2024
+9662,1252,Race,Yas Marina Circuit,United Arab Emirates,Yas Island,2024-12-08,2024

@@ -1,0 +1,143 @@
+AWSTemplateFormatVersion: "2010-09-09"
+Transform: AWS::Serverless-2016-10-31
+Description: F1 Pitwall platform - raw ingest (M1)
+
+Parameters:
+  AlertEmail:
+    Type: String
+    Description: Address that receives validation summaries (passed at deploy time, not stored in the repo)
+    AllowedPattern: "[^@\\s]+@[^@\\s]+\\.[^@\\s]+"
+
+  SnowflakeIamUserArn:
+    Type: String
+    Default: ""
+    Description: STORAGE_AWS_IAM_USER_ARN from DESC INTEGRATION (empty until the integration exists)
+  SnowflakeExternalId:
+    Type: String
+    Default: "pending"
+    Description: STORAGE_AWS_EXTERNAL_ID from DESC INTEGRATION
+
+Conditions:
+  HasSnowflakeTrust: !Not [!Equals [!Ref SnowflakeIamUserArn, ""]]
+
+Globals:
+  Function:
+    Runtime: python3.13
+    Timeout: 900
+    MemorySize: 256
+
+Resources:
+  SummaryTopic:
+    Type: AWS::SNS::Topic
+    Properties:
+      Subscription:
+        - Protocol: email
+          Endpoint: !Ref AlertEmail
+
+  RawBucket:
+    Type: AWS::S3::Bucket
+    Properties:
+      BucketEncryption:
+        ServerSideEncryptionConfiguration:
+          - ServerSideEncryptionByDefault:
+              SSEAlgorithm: AES256
+      PublicAccessBlockConfiguration:
+        BlockPublicAcls: true
+        BlockPublicPolicy: true
+        IgnorePublicAcls: true
+        RestrictPublicBuckets: true
+      LifecycleConfiguration:
+        Rules:
+          - Id: AbortIncompleteUploads
+            Status: Enabled
+            AbortIncompleteMultipartUpload:
+              DaysAfterInitiation: 7
+
+  # Role that Snowflake's storage integration assumes to read silver/ and quarantine/ only.
+  # Until SnowflakeIamUserArn is set, it trusts this account's root as a harmless placeholder.
+  SnowflakeReaderRole:
+    Type: AWS::IAM::Role
+    Properties:
+      RoleName: f1-pitwall-snowflake-reader
+      AssumeRolePolicyDocument:
+        Version: "2012-10-17"
+        Statement:
+          - Effect: Allow
+            Action: sts:AssumeRole
+            Principal:
+              AWS: !If
+                - HasSnowflakeTrust
+                - !Ref SnowflakeIamUserArn
+                - !Sub "arn:aws:iam::${AWS::AccountId}:root"
+            Condition:
+              StringEquals:
+                sts:ExternalId: !Ref SnowflakeExternalId
+      Policies:
+        - PolicyName: read-silver-and-quarantine
+          PolicyDocument:
+            Version: "2012-10-17"
+            Statement:
+              - Effect: Allow
+                Action: [s3:GetObject, s3:GetObjectVersion]
+                Resource:
+                  - !Sub "${RawBucket.Arn}/silver/*"
+                  - !Sub "${RawBucket.Arn}/quarantine/*"
+              - Effect: Allow
+                Action: [s3:ListBucket, s3:GetBucketLocation]
+                Resource: !GetAtt RawBucket.Arn
+                Condition:
+                  StringLike:
+                    s3:prefix: ["silver/*", "quarantine/*"]
+
+  IngestFunction:
+    Type: AWS::Serverless::Function
+    Properties:
+      CodeUri: ../src/
+      Handler: ingest.handler.lambda_handler
+      Description: Fetch finished OpenF1 race/sprint sessions into immutable raw S3 objects
+      Environment:
+        Variables:
+          RAW_BUCKET: !Ref RawBucket
+      Policies:
+        - S3CrudPolicy:
+            BucketName: !Ref RawBucket
+      Events:
+        Weekly:
+          Type: Schedule
+          Properties:
+            Description: Mondays 06:00 UTC, after race weekends; off-season runs do nothing
+            Schedule: cron(0 6 ? * MON *)
+
+  ValidateFunction:
+    Type: AWS::Serverless::Function
+    Properties:
+      CodeUri: ../src/
+      Handler: validate.handler.lambda_handler
+      Description: Validate raw sessions into silver and quarantine Parquet, then email a summary
+      MemorySize: 1024
+      Timeout: 300
+      Environment:
+        Variables:
+          RAW_BUCKET: !Ref RawBucket
+          SUMMARY_TOPIC_ARN: !Ref SummaryTopic
+      Policies:
+        - S3CrudPolicy:
+            BucketName: !Ref RawBucket
+        - SNSPublishMessagePolicy:
+            TopicName: !GetAtt SummaryTopic.TopicName
+      Events:
+        Weekly:
+          Type: Schedule
+          Properties:
+            Description: Mondays 07:00 UTC, an hour after ingest
+            Schedule: cron(0 7 ? * MON *)
+
+Outputs:
+  RawBucketName:
+    Value: !Ref RawBucket
+  IngestFunctionName:
+    Value: !Ref IngestFunction
+  ValidateFunctionName:
+    Value: !Ref ValidateFunction
+  SnowflakeReaderRoleArn:
+    Value: !GetAtt SnowflakeReaderRole.Arn

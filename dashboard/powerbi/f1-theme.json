@@ -1,0 +1,15 @@
+{
+  "name": "F1 Pitwall",
+  "dataColors": ["#d62728", "#e6a817", "#7f7f7f", "#4c78a8", "#59a14f", "#9c755f", "#b07aa1", "#76b7b2"],
+  "background": "#ffffff",
+  "foreground": "#262730",
+  "tableAccent": "#4c78a8",
+  "good": "#59a14f",
+  "neutral": "#e6a817",
+  "bad": "#d62728",
+  "textClasses": {
+    "title": { "fontFace": "Segoe UI Semibold", "fontSize": 20 },
+    "label": { "fontFace": "Segoe UI", "fontSize": 11 },
+    "callout": { "fontFace": "Segoe UI Semibold", "fontSize": 28 }
+  }
+}

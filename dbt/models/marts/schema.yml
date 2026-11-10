@@ -1,0 +1,98 @@
+version: 2
+
+models:
+  - name: fct_laps
+    description: One row per validated lap, with stint, tyre age, weather and a clean-lap flag.
+    data_tests:
+      - dbt_utils.equal_rowcount:
+          arguments:
+            compare_model: ref('stg_laps')
+      - dbt_utils.unique_combination_of_columns:
+          arguments:
+            combination_of_columns: [session_key, driver_number, lap_number]
+      - dbt_utils.expression_is_true:
+          arguments:
+            expression: "not is_clean_lap or (lap_number > 1 and not is_pit_out_lap and not is_in_lap and track_status = 'GREEN')"
+      - dbt_utils.expression_is_true:
+          arguments:
+            expression: "tyre_age is null or tyre_age >= 0"
+    columns:
+      - name: is_clean_lap
+        data_tests: [not_null]
+      - name: track_status
+        data_tests:
+          - accepted_values:
+              arguments:
+                values: [GREEN, SC, VSC, RED]
+
+  - name: fct_stints
+    description: One row per stint; ended_by_pit marks right-censored stints.
+    data_tests:
+      - dbt_utils.equal_rowcount:
+          arguments:
+            compare_model: ref('stg_stints')
+      - dbt_utils.unique_combination_of_columns:
+          arguments:
+            combination_of_columns: [session_key, driver_number, stint_number]
+      - dbt_utils.expression_is_true:
+          arguments:
+            expression: "stint_laps > 0"
+    columns:
+      - name: ended_by_pit
+        data_tests: [not_null]
+
+  - name: fct_pit_stops
+    description: One row per pit stop with lane time and an estimated pit loss.
+    data_tests:
+      - dbt_utils.equal_rowcount:
+          arguments:
+            compare_model: ref('stg_pit')
+      - dbt_utils.expression_is_true:
+          arguments:
+            expression: "lane_duration > 0"
+    columns:
+      - name: is_long_stop
+        data_tests: [not_null]
+
+  - name: mart_tyre_degradation
+    description: Question 1 - fuel-corrected tyre degradation per race and dry compound.
+    data_tests:
+      - dbt_utils.unique_combination_of_columns:
+          arguments:
+            combination_of_columns: [session_key, compound]
+      - dbt_utils.expression_is_true:
+          arguments:
+            expression: "(slope_s_per_lap is null or abs(slope_s_per_lap) < 5) and (slope_pooled_s_per_lap is null or abs(slope_pooled_s_per_lap) < 5)"
+    columns:
+      - name: n_clean_laps
+        data_tests:
+          - dbt_utils.expression_is_true:
+              arguments:
+                expression: "> 0"
+
+  - name: mart_pit_loss
+    description: Question 2 - pit-stop cost per race and track status.
+    data_tests:
+      - dbt_utils.unique_combination_of_columns:
+          arguments:
+            combination_of_columns: [session_key, track_status]
+    columns:
+      - name: n_stops
+        data_tests:
+          - dbt_utils.expression_is_true:
+              arguments:
+                expression: "> 0"
+
+  - name: mart_dq_health
+    description: Rows quarantined and flagged per race and rule, for the dashboard.
+    columns:
+      - name: outcome
+        data_tests:
+          - accepted_values:
+              arguments:
+                values: [quarantined, flagged]
+      - name: n_rows
+        data_tests:
+          - dbt_utils.expression_is_true:
+              arguments:
+                expression: "> 0"

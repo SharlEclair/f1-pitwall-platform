@@ -1,0 +1,94 @@
+version: 2
+
+models:
+  - name: stg_sessions
+    columns:
+      - name: session_key
+        data_tests: [unique, not_null]
+      - name: session_name
+        data_tests:
+          - accepted_values:
+              arguments:
+                values: [Race, Sprint]
+
+  - name: stg_laps
+    data_tests:
+      - dbt_utils.equal_rowcount:
+          arguments:
+            compare_model: source('raw', 'laps')
+      - dbt_utils.unique_combination_of_columns:
+          arguments:
+            combination_of_columns: [session_key, driver_number, lap_number]
+    columns:
+      - name: session_key
+        data_tests:
+          - not_null
+          - relationships:
+              arguments:
+                to: ref('stg_sessions')
+                field: session_key
+      - name: track_status
+        data_tests:
+          - not_null
+          - accepted_values:
+              arguments:
+                values: [GREEN, SC, VSC, RED]
+
+  - name: stg_stints
+    data_tests:
+      - dbt_utils.equal_rowcount:
+          arguments:
+            compare_model: source('raw', 'stints')
+      - dbt_utils.expression_is_true:
+          arguments:
+            expression: "lap_end >= lap_start"
+    columns:
+      - name: compound
+        data_tests:
+          - accepted_values:
+              arguments:
+                values: [SOFT, MEDIUM, HARD, INTERMEDIATE, WET, UNKNOWN]
+
+  - name: stg_pit
+    data_tests:
+      - dbt_utils.equal_rowcount:
+          arguments:
+            compare_model: source('raw', 'pit')
+    columns:
+      - name: pit_duration
+        data_tests: [not_null]
+
+  - name: stg_drivers
+    data_tests:
+      - dbt_utils.equal_rowcount:
+          arguments:
+            compare_model: source('raw', 'drivers')
+
+  - name: stg_weather
+    data_tests:
+      - dbt_utils.equal_rowcount:
+          arguments:
+            compare_model: source('raw', 'weather')
+
+  - name: stg_race_control
+    data_tests:
+      - dbt_utils.equal_rowcount:
+          arguments:
+            compare_model: source('raw', 'race_control')
+
+  - name: stg_quarantine
+    columns:
+      - name: rule_code
+        description: Only reject-severity rules ever reach quarantine.
+        data_tests:
+          - not_null
+          - accepted_values:
+              arguments:
+                values:
+                  - DQ-API-001
+                  - DQ-LAP-001
+                  - DQ-LAP-002
+                  - DQ-LAP-005
+                  - DQ-STINT-001
+                  - DQ-STINT-003
+                  - DQ-SESS-001

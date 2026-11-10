@@ -1,0 +1,54 @@
+# secrets
+.env
+.env.*
+!.env.example
+*.pem
+*.key
+*.p8
+*.pfx
+credentials*
+.aws/
+.snowsql/
+
+# python
+.venv/
+__pycache__/
+*.pyc
+.pytest_cache/
+.ruff_cache/
+.mypy_cache/
+
+# tooling output
+.logs/
+mlruns/
+mlartifacts/
+mlflow.db
+.aws-sam/
+dbt/target/
+dbt/dbt_packages/
+dbt/logs/
+*.duckdb
+*.duckdb.wal
+
+# local-only working files (kept on disk, never published)
+docs/CANDIDATE-CONTEXT.md
+CLAUDE.md
+PROGRESS.md
+prompts/
+docs/PROJECT-BRIEF.md
+docs/GOALS.md
+docs/OPEN-QUESTIONS.md
+docs/ROADMAP.md
+
+# data (commit only small fixtures under dbt/fixtures and the aggregated tables in dashboard/data)
+/data/
+/raw/
+*.parquet
+!**/fixtures/**/*.parquet
+!dashboard/data/*.parquet
+
+# os / editor
+.DS_Store
+Thumbs.db
+.idea/
+.vscode/

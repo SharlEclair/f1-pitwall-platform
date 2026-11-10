@@ -1,0 +1,1 @@
+{"bad":[{"laps":[{"lap_number":1},{"lap_number":2,"lap_duration":null},{"lap_number":3}]}],"good":[{"laps":[{"lap_number":2},{"lap_number":3,"lap_duration":null}]},{"laps":[{"lap_number":1,"lap_duration":null},{"lap_number":2}]}]}

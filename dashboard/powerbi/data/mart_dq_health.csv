@@ -1,0 +1,70 @@
+session_key,circuit_short_name,session_name,rule_code,outcome,n_rows
+9496,Suzuka,Race,DQ-LAP-002,quarantined,1
+9523,Monte Carlo,Race,DQ-STINT-001,quarantined,16
+9644,Las Vegas,Race,DQ-LAP-005,quarantined,17
+9496,Suzuka,Race,DQ-LAP-003,flagged,3
+9566,Hungaroring,Race,DQ-LAP-003,flagged,2
+9635,Interlagos,Sprint,DQ-LAP-003,flagged,7
+9523,Monte Carlo,Race,DQ-LAP-003,flagged,20
+9558,Silverstone,Race,DQ-LAP-003,flagged,3
+9636,Interlagos,Race,DQ-LAP-003,flagged,5
+9506,Miami,Sprint,DQ-LAP-003,flagged,3
+9531,Montreal,Race,DQ-LAP-003,flagged,5
+9574,Spa-Francorchamps,Race,DQ-LAP-003,flagged,1
+9606,Singapore,Race,DQ-LAP-003,flagged,2
+9644,Las Vegas,Race,DQ-LAP-003,flagged,3
+9598,Baku,Race,DQ-LAP-003,flagged,6
+9488,Melbourne,Race,DQ-LAP-003,flagged,4
+9616,Austin,Sprint,DQ-LAP-003,flagged,1
+9662,Yas Marina Circuit,Race,DQ-LAP-003,flagged,4
+9507,Miami,Race,DQ-LAP-003,flagged,2
+9625,Mexico City,Race,DQ-LAP-003,flagged,4
+9550,Spielberg,Race,DQ-LAP-003,flagged,3
+9673,Shanghai,Race,DQ-LAP-003,flagged,4
+9590,Monza,Race,DQ-LAP-003,flagged,1
+9654,Lusail,Sprint,DQ-LAP-003,flagged,2
+9672,Shanghai,Sprint,DQ-LAP-003,flagged,1
+9515,Imola,Race,DQ-LAP-003,flagged,2
+9539,Catalunya,Race,DQ-LAP-003,flagged,1
+9582,Zandvoort,Race,DQ-LAP-003,flagged,1
+9480,Jeddah,Race,DQ-LAP-003,flagged,2
+9617,Austin,Race,DQ-LAP-003,flagged,2
+9655,Lusail,Race,DQ-LAP-003,flagged,5
+9496,Suzuka,Race,DQ-LAP-004,flagged,17
+9636,Interlagos,Race,DQ-LAP-004,flagged,1
+9531,Montreal,Race,DQ-LAP-004,flagged,1
+9574,Spa-Francorchamps,Race,DQ-LAP-004,flagged,1
+9606,Singapore,Race,DQ-LAP-004,flagged,1
+9662,Yas Marina Circuit,Race,DQ-LAP-004,flagged,1
+9550,Spielberg,Race,DQ-LAP-004,flagged,1
+9480,Jeddah,Race,DQ-STINT-002,flagged,2
+9566,Hungaroring,Race,DQ-STINT-002,flagged,1
+9496,Suzuka,Race,DQ-STINT-002,flagged,1
+9574,Spa-Francorchamps,Race,DQ-STINT-002,flagged,5
+9617,Austin,Race,DQ-STINT-002,flagged,1
+9506,Miami,Sprint,DQ-STINT-002,flagged,1
+9590,Monza,Race,DQ-STINT-002,flagged,1
+9644,Las Vegas,Race,DQ-STINT-002,flagged,2
+9515,Imola,Race,DQ-STINT-002,flagged,1
+9550,Spielberg,Race,DQ-STINT-002,flagged,2
+9606,Singapore,Race,DQ-STINT-002,flagged,2
+9655,Lusail,Race,DQ-STINT-002,flagged,5
+9558,Silverstone,Race,DQ-STINT-002,flagged,1
+9636,Interlagos,Race,DQ-STINT-002,flagged,2
+9673,Shanghai,Race,DQ-STINT-002,flagged,3
+9625,Mexico City,Race,DQ-STINT-002,flagged,1
+9507,Miami,Race,DQ-STINT-002,flagged,2
+9598,Baku,Race,DQ-STINT-002,flagged,4
+9635,Interlagos,Sprint,DQ-STINT-002,flagged,4
+9488,Melbourne,Race,DQ-STINT-002,flagged,3
+9531,Montreal,Race,DQ-STINT-002,flagged,5
+9672,Shanghai,Sprint,DQ-STINT-002,flagged,1
+9662,Yas Marina Circuit,Race,DQ-STINT-002,flagged,3
+9655,Lusail,Race,DQ-STINT-004,flagged,2
+9523,Monte Carlo,Race,DQ-PIT-001,flagged,16
+9636,Interlagos,Race,DQ-PIT-001,flagged,17
+9480,Jeddah,Race,DQ-PIT-001,flagged,1
+9531,Montreal,Race,DQ-PIT-001,flagged,1
+9496,Suzuka,Race,DQ-PIT-001,flagged,18
+9673,Shanghai,Race,DQ-PIT-001,flagged,1
+9472,Sakhir,Race,DQ-PIT-001,flagged,1

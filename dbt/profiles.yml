@@ -1,0 +1,19 @@
+# No secrets here. Snowflake values come from environment variables (key-pair login, no password).
+# Defaults of '' let the DuckDB target parse without those variables being set (CI).
+f1_pitwall:
+  target: duckdb
+  outputs:
+    duckdb:
+      type: duckdb
+      path: "target/f1_pitwall.duckdb"
+      threads: 4
+    snowflake:
+      type: snowflake
+      account: "{{ env_var('SNOWFLAKE_ACCOUNT', '') }}"
+      user: "{{ env_var('SNOWFLAKE_USER', '') }}"
+      private_key_path: "{{ env_var('SNOWFLAKE_PRIVATE_KEY_PATH', '') }}"
+      role: F1_ENGINEER
+      warehouse: F1_WH
+      database: F1_PITWALL
+      schema: ANALYTICS
+      threads: 4

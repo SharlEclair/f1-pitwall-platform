@@ -1,0 +1,11 @@
+[tool.ruff]
+line-length = 100
+extend-exclude = [".aws-sam", ".logs", "data", "dbt/target"]
+target-version = "py312"
+
+[tool.ruff.lint]
+select = ["E", "F", "I", "B", "UP"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+pythonpath = ["src"]
