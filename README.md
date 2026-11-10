@@ -17,7 +17,7 @@ repository. Where something is an assumption, an estimate or blocked, it says so
 | 3. How often does an undercut work? | **Not answered.** Deferred; it needs position data and the hardest mart. | n/a |
 | 4. Can a model forecast later clean laps better than simple baselines? | Mean absolute error across 23 held-out races: persistence 1.498 s, linear physics baseline 1.066 s, LightGBM 1.008 s. LightGBM vs the linear baseline: -0.058 s, 95% interval -0.166 to +0.043, **no detectable difference**. | Fixed settings, no tuning, one season. The model is not shown to beat the simple physics baseline. Full results: [docs/ML-RESULTS.md](docs/ML-RESULTS.md). |
 
-The dashboard (`dashboard/app.py`) shows these with their caveats beside them.
+The [live dashboard](https://f1-pitwall-platform-msvnskb3jcqzt2qdrsyxs2.streamlit.app/) (source: `dashboard/app.py`) shows these with their caveats beside them.
 
 ## Architecture
 
