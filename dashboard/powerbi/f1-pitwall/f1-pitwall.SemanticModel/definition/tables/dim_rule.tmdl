@@ -1,0 +1,38 @@
+table dim_rule
+
+	column rule_code
+		dataType: string
+		summarizeBy: none
+		sourceColumn: rule_code
+
+	column severity
+		dataType: string
+		summarizeBy: none
+		sourceColumn: severity
+
+	column entity
+		dataType: string
+		summarizeBy: none
+		sourceColumn: entity
+
+	column description
+		dataType: string
+		summarizeBy: none
+		sourceColumn: description
+
+	/// Coded rules shipped with this project
+	measure 'Rules Available' = COUNTROWS ( dim_rule )
+		formatString: 0
+		displayFolder: "Data quality"
+
+	partition dim_rule = m
+		mode: import
+		source =
+				let
+				    Source = Csv.Document(File.Contents(DataFolder & "\dim_rule.csv"), [Delimiter = ",", Encoding = 65001, QuoteStyle = QuoteStyle.Csv]),
+				    Promoted = Table.PromoteHeaders(Source, [PromoteAllScalars = true]),
+				    Typed = Table.TransformColumnTypes(Promoted, {{"rule_code", type text}, {"severity", type text}, {"entity", type text}, {"description", type text}}, "en-US")
+				in
+				    Typed
+
+	annotation PBI_ResultType = Table

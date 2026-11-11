@@ -1,0 +1,31 @@
+relationship rel_tyre_race
+	fromColumn: mart_tyre_degradation.session_key
+	toColumn: dim_race.session_key
+
+relationship rel_pit_race
+	fromColumn: mart_pit_loss.session_key
+	toColumn: dim_race.session_key
+
+relationship rel_dq_race
+	fromColumn: mart_dq_health.session_key
+	toColumn: dim_race.session_key
+
+relationship rel_modelrace_race
+	fromColumn: model_by_race.session_key
+	toColumn: dim_race.session_key
+
+relationship rel_race_season
+	fromColumn: dim_race.season
+	toColumn: dim_season.season
+
+relationship rel_pitseason_season
+	fromColumn: pit_loss_by_season.season
+	toColumn: dim_season.season
+
+relationship rel_modelseason_season
+	fromColumn: model_by_season_out.season
+	toColumn: dim_season.season
+
+relationship rel_dq_rule
+	fromColumn: mart_dq_health.rule_code
+	toColumn: dim_rule.rule_code

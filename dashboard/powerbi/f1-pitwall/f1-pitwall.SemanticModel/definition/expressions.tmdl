@@ -1,0 +1,3 @@
+expression DataFolder = "C:\data\f1-pitwall" meta [IsParameterQuery=true, Type="Text", IsParameterQueryRequired=true]
+
+	annotation PBI_ResultType = Text

@@ -1,0 +1,60 @@
+table model_paired_differences
+
+	column comparison
+		dataType: string
+		summarizeBy: none
+		sourceColumn: comparison
+
+	column mean_diff_s
+		dataType: double
+		summarizeBy: none
+		sourceColumn: mean_diff_s
+
+	column ci_low_s
+		dataType: double
+		summarizeBy: none
+		sourceColumn: ci_low_s
+
+	column ci_high_s
+		dataType: double
+		summarizeBy: none
+		sourceColumn: ci_high_s
+
+	column races_better
+		dataType: int64
+		formatString: 0
+		summarizeBy: none
+		sourceColumn: races_better
+
+	column n_races
+		dataType: int64
+		formatString: 0
+		summarizeBy: none
+		sourceColumn: n_races
+
+	/// LightGBM minus linear baseline, mean MAE difference across races
+	measure 'Mean Diff' = CALCULATE ( MIN ( model_paired_differences[mean_diff_s] ), model_paired_differences[comparison] = "LightGBM minus B1" )
+		formatString: +0.000" s";-0.000" s"
+		displayFolder: "Model"
+
+	measure 'Diff Interval Text' = VAR lo = CALCULATE ( MIN ( model_paired_differences[ci_low_s] ), model_paired_differences[comparison] = "LightGBM minus B1" ) VAR hi = CALCULATE ( MAX ( model_paired_differences[ci_high_s] ), model_paired_differences[comparison] = "LightGBM minus B1" ) RETURN "95% interval " & FORMAT ( lo, "+0.000;-0.000" ) & " to " & FORMAT ( hi, "+0.000;-0.000" ) & " s"
+		displayFolder: "Model"
+
+	measure 'Races Better Text' = VAR k = CALCULATE ( MIN ( model_paired_differences[races_better] ), model_paired_differences[comparison] = "LightGBM minus B1" ) VAR n = CALCULATE ( MIN ( model_paired_differences[n_races] ), model_paired_differences[comparison] = "LightGBM minus B1" ) RETURN "LightGBM better in " & k & " of " & n & " races"
+		displayFolder: "Model"
+
+	/// Verdict is computed from the interval, not typed
+	measure 'Model Verdict' = VAR lo = CALCULATE ( MIN ( model_paired_differences[ci_low_s] ), model_paired_differences[comparison] = "LightGBM minus B1" ) VAR hi = CALCULATE ( MAX ( model_paired_differences[ci_high_s] ), model_paired_differences[comparison] = "LightGBM minus B1" ) RETURN SWITCH ( TRUE (), hi < 0, "LightGBM beats the linear baseline: the 95% interval excludes zero.", lo > 0, "The linear baseline beats LightGBM: the 95% interval excludes zero.", "No detectable difference: the 95% interval includes zero." )
+		displayFolder: "Model"
+
+	partition model_paired_differences = m
+		mode: import
+		source =
+				let
+				    Source = Csv.Document(File.Contents(DataFolder & "\model_paired_differences.csv"), [Delimiter = ",", Encoding = 65001, QuoteStyle = QuoteStyle.Csv]),
+				    Promoted = Table.PromoteHeaders(Source, [PromoteAllScalars = true]),
+				    Typed = Table.TransformColumnTypes(Promoted, {{"comparison", type text}, {"mean_diff_s", type number}, {"ci_low_s", type number}, {"ci_high_s", type number}, {"races_better", Int64.Type}, {"n_races", Int64.Type}}, "en-US")
+				in
+				    Typed
+
+	annotation PBI_ResultType = Table

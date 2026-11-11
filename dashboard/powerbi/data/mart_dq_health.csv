@@ -1,70 +1,249 @@
-session_key,circuit_short_name,session_name,rule_code,outcome,n_rows
-9496,Suzuka,Race,DQ-LAP-002,quarantined,1
-9523,Monte Carlo,Race,DQ-STINT-001,quarantined,16
-9644,Las Vegas,Race,DQ-LAP-005,quarantined,17
-9496,Suzuka,Race,DQ-LAP-003,flagged,3
-9566,Hungaroring,Race,DQ-LAP-003,flagged,2
-9635,Interlagos,Sprint,DQ-LAP-003,flagged,7
-9523,Monte Carlo,Race,DQ-LAP-003,flagged,20
-9558,Silverstone,Race,DQ-LAP-003,flagged,3
-9636,Interlagos,Race,DQ-LAP-003,flagged,5
-9506,Miami,Sprint,DQ-LAP-003,flagged,3
-9531,Montreal,Race,DQ-LAP-003,flagged,5
-9574,Spa-Francorchamps,Race,DQ-LAP-003,flagged,1
-9606,Singapore,Race,DQ-LAP-003,flagged,2
-9644,Las Vegas,Race,DQ-LAP-003,flagged,3
-9598,Baku,Race,DQ-LAP-003,flagged,6
-9488,Melbourne,Race,DQ-LAP-003,flagged,4
-9616,Austin,Sprint,DQ-LAP-003,flagged,1
-9662,Yas Marina Circuit,Race,DQ-LAP-003,flagged,4
-9507,Miami,Race,DQ-LAP-003,flagged,2
-9625,Mexico City,Race,DQ-LAP-003,flagged,4
-9550,Spielberg,Race,DQ-LAP-003,flagged,3
-9673,Shanghai,Race,DQ-LAP-003,flagged,4
-9590,Monza,Race,DQ-LAP-003,flagged,1
-9654,Lusail,Sprint,DQ-LAP-003,flagged,2
-9672,Shanghai,Sprint,DQ-LAP-003,flagged,1
-9515,Imola,Race,DQ-LAP-003,flagged,2
-9539,Catalunya,Race,DQ-LAP-003,flagged,1
-9582,Zandvoort,Race,DQ-LAP-003,flagged,1
-9480,Jeddah,Race,DQ-LAP-003,flagged,2
-9617,Austin,Race,DQ-LAP-003,flagged,2
-9655,Lusail,Race,DQ-LAP-003,flagged,5
-9496,Suzuka,Race,DQ-LAP-004,flagged,17
-9636,Interlagos,Race,DQ-LAP-004,flagged,1
-9531,Montreal,Race,DQ-LAP-004,flagged,1
-9574,Spa-Francorchamps,Race,DQ-LAP-004,flagged,1
-9606,Singapore,Race,DQ-LAP-004,flagged,1
-9662,Yas Marina Circuit,Race,DQ-LAP-004,flagged,1
-9550,Spielberg,Race,DQ-LAP-004,flagged,1
-9480,Jeddah,Race,DQ-STINT-002,flagged,2
-9566,Hungaroring,Race,DQ-STINT-002,flagged,1
-9496,Suzuka,Race,DQ-STINT-002,flagged,1
-9574,Spa-Francorchamps,Race,DQ-STINT-002,flagged,5
-9617,Austin,Race,DQ-STINT-002,flagged,1
-9506,Miami,Sprint,DQ-STINT-002,flagged,1
-9590,Monza,Race,DQ-STINT-002,flagged,1
-9644,Las Vegas,Race,DQ-STINT-002,flagged,2
-9515,Imola,Race,DQ-STINT-002,flagged,1
-9550,Spielberg,Race,DQ-STINT-002,flagged,2
-9606,Singapore,Race,DQ-STINT-002,flagged,2
-9655,Lusail,Race,DQ-STINT-002,flagged,5
-9558,Silverstone,Race,DQ-STINT-002,flagged,1
-9636,Interlagos,Race,DQ-STINT-002,flagged,2
-9673,Shanghai,Race,DQ-STINT-002,flagged,3
-9625,Mexico City,Race,DQ-STINT-002,flagged,1
-9507,Miami,Race,DQ-STINT-002,flagged,2
-9598,Baku,Race,DQ-STINT-002,flagged,4
-9635,Interlagos,Sprint,DQ-STINT-002,flagged,4
-9488,Melbourne,Race,DQ-STINT-002,flagged,3
-9531,Montreal,Race,DQ-STINT-002,flagged,5
-9672,Shanghai,Sprint,DQ-STINT-002,flagged,1
-9662,Yas Marina Circuit,Race,DQ-STINT-002,flagged,3
-9655,Lusail,Race,DQ-STINT-004,flagged,2
-9523,Monte Carlo,Race,DQ-PIT-001,flagged,16
-9636,Interlagos,Race,DQ-PIT-001,flagged,17
-9480,Jeddah,Race,DQ-PIT-001,flagged,1
-9531,Montreal,Race,DQ-PIT-001,flagged,1
-9496,Suzuka,Race,DQ-PIT-001,flagged,18
-9673,Shanghai,Race,DQ-PIT-001,flagged,1
-9472,Sakhir,Race,DQ-PIT-001,flagged,1
+session_key,season,circuit_short_name,session_name,rule_code,outcome,n_rows
+9094,2023,Monte Carlo,Race,DQ-STINT-001,quarantined,3
+9693,2025,Melbourne,Race,DQ-STINT-001,quarantined,6
+9883,2025,Austin,Sprint,DQ-STINT-003,quarantined,1
+9110,2023,Montreal,Race,DQ-STINT-001,quarantined,1
+9979,2025,Monte Carlo,Race,DQ-STINT-001,quarantined,4
+9078,2023,Miami,Race,DQ-LAP-003,flagged,1
+10014,2025,Sakhir,Race,DQ-LAP-003,flagged,1
+9850,2025,Lusail,Race,DQ-LAP-003,flagged,4
+9126,2023,Silverstone,Race,DQ-LAP-003,flagged,4
+9947,2025,Silverstone,Race,DQ-LAP-003,flagged,5
+9110,2023,Montreal,Race,DQ-LAP-003,flagged,3
+9213,2023,Austin,Race,DQ-LAP-003,flagged,7
+9070,2023,Baku,Race,DQ-LAP-003,flagged,4
+9934,2025,Spa-Francorchamps,Sprint,DQ-LAP-003,flagged,2
+9987,2025,Imola,Race,DQ-LAP-003,flagged,2
+9883,2025,Austin,Sprint,DQ-LAP-003,flagged,5
+9212,2023,Austin,Sprint,DQ-LAP-003,flagged,2
+9928,2025,Hungaroring,Race,DQ-LAP-003,flagged,1
+9140,2023,Spa-Francorchamps,Sprint,DQ-LAP-003,flagged,2
+9221,2023,Lusail,Race,DQ-LAP-003,flagged,5
+9693,2025,Melbourne,Race,DQ-LAP-003,flagged,7
+9888,2025,Austin,Race,DQ-LAP-003,flagged,1
+9598,2024,Baku,Race,DQ-LAP-003,flagged,6
+9616,2024,Austin,Sprint,DQ-LAP-003,flagged,1
+9662,2024,Yas Marina Circuit,Race,DQ-LAP-003,flagged,4
+9102,2023,Catalunya,Race,DQ-LAP-003,flagged,2
+10022,2025,Jeddah,Race,DQ-LAP-003,flagged,2
+9864,2025,Interlagos,Sprint,DQ-LAP-003,flagged,3
+9912,2025,Monza,Race,DQ-LAP-003,flagged,2
+9998,2025,Shanghai,Race,DQ-LAP-003,flagged,1
+9582,2024,Zandvoort,Race,DQ-LAP-003,flagged,1
+9617,2024,Austin,Race,DQ-LAP-003,flagged,2
+9590,2024,Monza,Race,DQ-LAP-003,flagged,1
+9869,2025,Interlagos,Race,DQ-LAP-003,flagged,3
+9149,2023,Zandvoort,Race,DQ-LAP-003,flagged,4
+9507,2024,Miami,Race,DQ-LAP-003,flagged,2
+9625,2024,Mexico City,Race,DQ-LAP-003,flagged,4
+9672,2024,Shanghai,Sprint,DQ-LAP-003,flagged,1
+9480,2024,Jeddah,Race,DQ-LAP-003,flagged,2
+9539,2024,Catalunya,Race,DQ-LAP-003,flagged,1
+9205,2023,Interlagos,Race,DQ-LAP-003,flagged,6
+9157,2023,Monza,Race,DQ-LAP-003,flagged,20
+9971,2025,Catalunya,Race,DQ-LAP-003,flagged,2
+9850,2025,Lusail,Race,DQ-LAP-004,flagged,1
+9110,2023,Montreal,Race,DQ-LAP-004,flagged,1
+9140,2023,Spa-Francorchamps,Sprint,DQ-LAP-004,flagged,1
+9149,2023,Zandvoort,Race,DQ-LAP-004,flagged,41
+9998,2025,Shanghai,Race,DQ-LAP-004,flagged,1
+9662,2024,Yas Marina Circuit,Race,DQ-LAP-004,flagged,1
+9864,2025,Interlagos,Sprint,DQ-LAP-004,flagged,2
+9205,2023,Interlagos,Race,DQ-LAP-004,flagged,9
+9126,2023,Silverstone,Race,DQ-STINT-002,flagged,4
+9883,2025,Austin,Sprint,DQ-STINT-002,flagged,2
+9934,2025,Spa-Francorchamps,Sprint,DQ-STINT-002,flagged,1
+9480,2024,Jeddah,Race,DQ-STINT-002,flagged,2
+9617,2024,Austin,Race,DQ-STINT-002,flagged,1
+9625,2024,Mexico City,Race,DQ-STINT-002,flagged,1
+9598,2024,Baku,Race,DQ-STINT-002,flagged,4
+9078,2023,Miami,Race,DQ-STINT-002,flagged,1
+9864,2025,Interlagos,Sprint,DQ-STINT-002,flagged,3
+9212,2023,Austin,Sprint,DQ-STINT-002,flagged,2
+10014,2025,Sakhir,Race,DQ-STINT-002,flagged,1
+9971,2025,Catalunya,Race,DQ-STINT-002,flagged,2
+9869,2025,Interlagos,Race,DQ-STINT-002,flagged,2
+9987,2025,Imola,Race,DQ-STINT-002,flagged,2
+9140,2023,Spa-Francorchamps,Sprint,DQ-STINT-002,flagged,4
+9947,2025,Silverstone,Race,DQ-STINT-002,flagged,3
+9662,2024,Yas Marina Circuit,Race,DQ-STINT-002,flagged,3
+9110,2023,Montreal,Race,DQ-STINT-002,flagged,3
+9157,2023,Monza,Race,DQ-STINT-002,flagged,19
+9149,2023,Zandvoort,Race,DQ-STINT-002,flagged,3
+9213,2023,Austin,Race,DQ-STINT-002,flagged,3
+9998,2025,Shanghai,Race,DQ-STINT-002,flagged,1
+9221,2023,Lusail,Race,DQ-STINT-002,flagged,3
+10022,2025,Jeddah,Race,DQ-STINT-002,flagged,1
+9850,2025,Lusail,Race,DQ-STINT-002,flagged,4
+9205,2023,Interlagos,Race,DQ-STINT-002,flagged,3
+9928,2025,Hungaroring,Race,DQ-STINT-002,flagged,1
+9590,2024,Monza,Race,DQ-STINT-002,flagged,1
+9888,2025,Austin,Race,DQ-STINT-002,flagged,1
+9507,2024,Miami,Race,DQ-STINT-002,flagged,2
+9672,2024,Shanghai,Sprint,DQ-STINT-002,flagged,1
+9912,2025,Monza,Race,DQ-STINT-002,flagged,1
+9693,2025,Melbourne,Race,DQ-STINT-002,flagged,4
+9070,2023,Baku,Race,DQ-STINT-002,flagged,2
+9480,2024,Jeddah,Race,DQ-PIT-001,flagged,1
+9472,2024,Sakhir,Race,DQ-PIT-001,flagged,1
+9149,2023,Zandvoort,Race,DQ-PIT-001,flagged,17
+9864,2025,Interlagos,Sprint,DQ-PIT-001,flagged,19
+9205,2023,Interlagos,Race,DQ-PIT-001,flagged,17
+9110,2023,Montreal,Race,DQ-PIT-001,flagged,1
+9539,2024,Catalunya,Race,DQ-INT-003,flagged,8
+9598,2024,Baku,Race,DQ-INT-003,flagged,487
+9472,2024,Sakhir,Race,DQ-INT-003,flagged,3
+9582,2024,Zandvoort,Race,DQ-INT-003,flagged,11
+9590,2024,Monza,Race,DQ-INT-003,flagged,33
+9617,2024,Austin,Race,DQ-INT-003,flagged,2
+9507,2024,Miami,Race,DQ-INT-003,flagged,5
+9928,2025,Hungaroring,Race,DQ-INT-003,flagged,6
+9947,2025,Silverstone,Race,DQ-INT-003,flagged,13
+9078,2023,Miami,Race,DQ-INT-003,flagged,9
+10022,2025,Jeddah,Race,DQ-INT-003,flagged,10
+9221,2023,Lusail,Race,DQ-INT-003,flagged,1
+9693,2025,Melbourne,Race,DQ-INT-003,flagged,13
+9971,2025,Catalunya,Race,DQ-INT-003,flagged,2
+9869,2025,Interlagos,Race,DQ-INT-003,flagged,3
+9850,2025,Lusail,Race,DQ-INT-003,flagged,15
+9912,2025,Monza,Race,DQ-INT-003,flagged,11
+10006,2025,Suzuka,Race,DQ-INT-003,flagged,1
+9149,2023,Zandvoort,Race,DQ-INT-003,flagged,1
+9205,2023,Interlagos,Race,DQ-INT-003,flagged,10
+9213,2023,Austin,Race,DQ-INT-003,flagged,1
+9845,2025,Lusail,Sprint,DQ-INT-003,flagged,1
+10014,2025,Sakhir,Race,DQ-INT-003,flagged,2
+9070,2023,Baku,Race,DQ-INT-003,flagged,3
+9126,2023,Silverstone,Race,DQ-INT-003,flagged,1
+9157,2023,Monza,Race,DQ-INT-003,flagged,6
+7787,2023,Melbourne,Race,DQ-STINT-001,quarantined,8
+9496,2024,Suzuka,Race,DQ-LAP-002,quarantined,1
+9523,2024,Monte Carlo,Race,DQ-STINT-001,quarantined,16
+9644,2024,Las Vegas,Race,DQ-LAP-005,quarantined,17
+9141,2023,Spa-Francorchamps,Race,DQ-LAP-003,flagged,3
+7953,2023,Sakhir,Race,DQ-LAP-003,flagged,3
+9181,2023,Mexico City,Race,DQ-LAP-003,flagged,7
+9220,2023,Lusail,Sprint,DQ-LAP-003,flagged,5
+9877,2025,Mexico City,Race,DQ-LAP-003,flagged,4
+9133,2023,Hungaroring,Race,DQ-LAP-003,flagged,3
+9920,2025,Zandvoort,Race,DQ-LAP-003,flagged,3
+9979,2025,Monte Carlo,Race,DQ-LAP-003,flagged,2
+9173,2023,Suzuka,Race,DQ-LAP-003,flagged,7
+9118,2023,Spielberg,Race,DQ-LAP-003,flagged,4
+9566,2024,Hungaroring,Race,DQ-LAP-003,flagged,2
+9635,2024,Interlagos,Sprint,DQ-LAP-003,flagged,7
+9558,2024,Silverstone,Race,DQ-LAP-003,flagged,3
+9636,2024,Interlagos,Race,DQ-LAP-003,flagged,5
+7779,2023,Jeddah,Race,DQ-LAP-003,flagged,3
+10033,2025,Miami,Race,DQ-LAP-003,flagged,3
+9523,2024,Monte Carlo,Race,DQ-LAP-003,flagged,20
+9506,2024,Miami,Sprint,DQ-LAP-003,flagged,3
+9531,2024,Montreal,Race,DQ-LAP-003,flagged,5
+9654,2024,Lusail,Sprint,DQ-LAP-003,flagged,2
+9574,2024,Spa-Francorchamps,Race,DQ-LAP-003,flagged,1
+9606,2024,Singapore,Race,DQ-LAP-003,flagged,2
+9189,2023,Las Vegas,Race,DQ-LAP-003,flagged,6
+9094,2023,Monte Carlo,Race,DQ-LAP-003,flagged,3
+9644,2024,Las Vegas,Race,DQ-LAP-003,flagged,3
+9515,2024,Imola,Race,DQ-LAP-003,flagged,2
+9550,2024,Spielberg,Race,DQ-LAP-003,flagged,3
+9673,2024,Shanghai,Race,DQ-LAP-003,flagged,4
+9858,2025,Las Vegas,Race,DQ-LAP-003,flagged,3
+9904,2025,Baku,Race,DQ-LAP-003,flagged,1
+9069,2023,Baku,Sprint,DQ-LAP-003,flagged,2
+9165,2023,Singapore,Race,DQ-LAP-003,flagged,8
+9955,2025,Spielberg,Race,DQ-LAP-003,flagged,4
+9496,2024,Suzuka,Race,DQ-LAP-003,flagged,3
+9197,2023,Yas Marina Circuit,Race,DQ-LAP-003,flagged,2
+9655,2024,Lusail,Race,DQ-LAP-003,flagged,5
+9963,2025,Montreal,Race,DQ-LAP-003,flagged,3
+10028,2025,Miami,Sprint,DQ-LAP-003,flagged,10
+7787,2023,Melbourne,Race,DQ-LAP-003,flagged,13
+9488,2024,Melbourne,Race,DQ-LAP-003,flagged,4
+9896,2025,Singapore,Race,DQ-LAP-004,flagged,1
+9181,2023,Mexico City,Race,DQ-LAP-004,flagged,18
+10028,2025,Miami,Sprint,DQ-LAP-004,flagged,33
+9133,2023,Hungaroring,Race,DQ-LAP-004,flagged,1
+7779,2023,Jeddah,Race,DQ-LAP-004,flagged,1
+9496,2024,Suzuka,Race,DQ-LAP-004,flagged,17
+9636,2024,Interlagos,Race,DQ-LAP-004,flagged,1
+9531,2024,Montreal,Race,DQ-LAP-004,flagged,1
+9574,2024,Spa-Francorchamps,Race,DQ-LAP-004,flagged,1
+7787,2023,Melbourne,Race,DQ-LAP-004,flagged,1
+9094,2023,Monte Carlo,Race,DQ-LAP-004,flagged,76
+9939,2025,Spa-Francorchamps,Race,DQ-LAP-004,flagged,60
+9550,2024,Spielberg,Race,DQ-LAP-004,flagged,1
+9606,2024,Singapore,Race,DQ-LAP-004,flagged,1
+7787,2023,Melbourne,Race,DQ-STINT-002,flagged,10
+9181,2023,Mexico City,Race,DQ-STINT-002,flagged,6
+9220,2023,Lusail,Sprint,DQ-STINT-002,flagged,4
+9566,2024,Hungaroring,Race,DQ-STINT-002,flagged,1
+9574,2024,Spa-Francorchamps,Race,DQ-STINT-002,flagged,5
+9506,2024,Miami,Sprint,DQ-STINT-002,flagged,1
+9644,2024,Las Vegas,Race,DQ-STINT-002,flagged,2
+9550,2024,Spielberg,Race,DQ-STINT-002,flagged,2
+9606,2024,Singapore,Race,DQ-STINT-002,flagged,2
+9488,2024,Melbourne,Race,DQ-STINT-002,flagged,3
+9558,2024,Silverstone,Race,DQ-STINT-002,flagged,1
+9636,2024,Interlagos,Race,DQ-STINT-002,flagged,2
+9673,2024,Shanghai,Race,DQ-STINT-002,flagged,3
+9531,2024,Montreal,Race,DQ-STINT-002,flagged,5
+9069,2023,Baku,Sprint,DQ-STINT-002,flagged,1
+9858,2025,Las Vegas,Race,DQ-STINT-002,flagged,2
+7779,2023,Jeddah,Race,DQ-STINT-002,flagged,3
+9133,2023,Hungaroring,Race,DQ-STINT-002,flagged,3
+9173,2023,Suzuka,Race,DQ-STINT-002,flagged,6
+10033,2025,Miami,Race,DQ-STINT-002,flagged,3
+7953,2023,Sakhir,Race,DQ-STINT-002,flagged,3
+9094,2023,Monte Carlo,Race,DQ-STINT-002,flagged,3
+9197,2023,Yas Marina Circuit,Race,DQ-STINT-002,flagged,2
+9635,2024,Interlagos,Sprint,DQ-STINT-002,flagged,4
+9141,2023,Spa-Francorchamps,Race,DQ-STINT-002,flagged,1
+9165,2023,Singapore,Race,DQ-STINT-002,flagged,6
+9877,2025,Mexico City,Race,DQ-STINT-002,flagged,4
+9955,2025,Spielberg,Race,DQ-STINT-002,flagged,1
+9963,2025,Montreal,Race,DQ-STINT-002,flagged,3
+9118,2023,Spielberg,Race,DQ-STINT-002,flagged,2
+9515,2024,Imola,Race,DQ-STINT-002,flagged,1
+9655,2024,Lusail,Race,DQ-STINT-002,flagged,5
+9920,2025,Zandvoort,Race,DQ-STINT-002,flagged,2
+9189,2023,Las Vegas,Race,DQ-STINT-002,flagged,6
+9496,2024,Suzuka,Race,DQ-STINT-002,flagged,1
+9979,2025,Monte Carlo,Race,DQ-STINT-002,flagged,2
+10028,2025,Miami,Sprint,DQ-STINT-002,flagged,9
+9655,2024,Lusail,Race,DQ-STINT-004,flagged,2
+9523,2024,Monte Carlo,Race,DQ-PIT-001,flagged,16
+9636,2024,Interlagos,Race,DQ-PIT-001,flagged,17
+9531,2024,Montreal,Race,DQ-PIT-001,flagged,1
+9496,2024,Suzuka,Race,DQ-PIT-001,flagged,18
+9673,2024,Shanghai,Race,DQ-PIT-001,flagged,1
+9173,2023,Suzuka,Race,DQ-PIT-001,flagged,1
+9181,2023,Mexico City,Race,DQ-PIT-001,flagged,18
+9165,2023,Singapore,Race,DQ-PIT-001,flagged,1
+9877,2025,Mexico City,Race,DQ-POS-004,flagged,18
+9606,2024,Singapore,Race,DQ-INT-003,flagged,510
+9531,2024,Montreal,Race,DQ-INT-003,flagged,5
+9636,2024,Interlagos,Race,DQ-INT-003,flagged,4
+9496,2024,Suzuka,Race,DQ-INT-003,flagged,3
+9644,2024,Las Vegas,Race,DQ-INT-003,flagged,2
+9558,2024,Silverstone,Race,DQ-INT-003,flagged,1
+9574,2024,Spa-Francorchamps,Race,DQ-INT-003,flagged,2
+9566,2024,Hungaroring,Race,DQ-INT-003,flagged,5
+9220,2023,Lusail,Sprint,DQ-INT-003,flagged,2
+7779,2023,Jeddah,Race,DQ-INT-003,flagged,1
+9118,2023,Spielberg,Race,DQ-INT-003,flagged,1
+9181,2023,Mexico City,Race,DQ-INT-003,flagged,3
+9963,2025,Montreal,Race,DQ-INT-003,flagged,11
+9979,2025,Monte Carlo,Race,DQ-INT-003,flagged,19
+10033,2025,Miami,Race,DQ-INT-003,flagged,1
+9515,2024,Imola,Race,DQ-INT-003,flagged,6
+9550,2024,Spielberg,Race,DQ-INT-003,flagged,16
+9673,2024,Shanghai,Race,DQ-INT-003,flagged,3
+9839,2025,Yas Marina Circuit,Race,DQ-INT-003,flagged,10
+9939,2025,Spa-Francorchamps,Race,DQ-INT-003,flagged,1
+9141,2023,Spa-Francorchamps,Race,DQ-INT-003,flagged,1
+10028,2025,Miami,Sprint,DQ-INT-003,flagged,3
+9896,2025,Singapore,Race,DQ-INT-003,flagged,7
+7953,2023,Sakhir,Race,DQ-INT-003,flagged,7
+9189,2023,Las Vegas,Race,DQ-INT-003,flagged,2
+9955,2025,Spielberg,Race,DQ-INT-003,flagged,13

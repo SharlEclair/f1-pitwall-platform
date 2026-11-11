@@ -1,0 +1,2 @@
+gap_threshold_s,response_window_laps,rate,ci_low,ci_high,n_races
+3.0,3,0.44785276073619634,0.35183933933933936,0.5384722222222221,48

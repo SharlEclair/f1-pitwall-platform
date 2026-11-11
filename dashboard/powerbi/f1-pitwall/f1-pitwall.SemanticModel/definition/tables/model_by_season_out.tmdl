@@ -1,0 +1,52 @@
+table model_by_season_out
+
+	column season
+		dataType: int64
+		formatString: 0
+		summarizeBy: none
+		sourceColumn: season
+
+	column n_laps
+		dataType: int64
+		formatString: 0
+		summarizeBy: none
+		sourceColumn: n_laps
+
+	column mae_b0
+		dataType: double
+		summarizeBy: none
+		sourceColumn: mae_b0
+
+	column mae_b1
+		dataType: double
+		summarizeBy: none
+		sourceColumn: mae_b1
+
+	column mae_gbm
+		dataType: double
+		summarizeBy: none
+		sourceColumn: mae_gbm
+
+	measure 'MAE B0' = AVERAGE ( model_by_season_out[mae_b0] )
+		formatString: 0.000
+		displayFolder: "Model"
+
+	measure 'MAE B1' = AVERAGE ( model_by_season_out[mae_b1] )
+		formatString: 0.000
+		displayFolder: "Model"
+
+	measure 'MAE LightGBM' = AVERAGE ( model_by_season_out[mae_gbm] )
+		formatString: 0.000
+		displayFolder: "Model"
+
+	partition model_by_season_out = m
+		mode: import
+		source =
+				let
+				    Source = Csv.Document(File.Contents(DataFolder & "\model_by_season_out.csv"), [Delimiter = ",", Encoding = 65001, QuoteStyle = QuoteStyle.Csv]),
+				    Promoted = Table.PromoteHeaders(Source, [PromoteAllScalars = true]),
+				    Typed = Table.TransformColumnTypes(Promoted, {{"season", Int64.Type}, {"n_laps", Int64.Type}, {"mae_b0", type number}, {"mae_b1", type number}, {"mae_gbm", type number}}, "en-US")
+				in
+				    Typed
+
+	annotation PBI_ResultType = Table

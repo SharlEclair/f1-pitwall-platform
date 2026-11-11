@@ -1,0 +1,24 @@
+rule_code,severity,entity,description
+DQ-API-001,reject,response,Row is missing a field the endpoint is expected to return
+DQ-API-002,warn,response,Row has a field that is not in the expected schema
+DQ-LAP-001,reject,lap,"Duplicate (session, driver, lap_number)"
+DQ-LAP-002,reject,lap,"Null lap_duration that is not lap 1, a red-flag lap or the driver's last recorded lap"
+DQ-LAP-003,flag,lap,"Null lap_duration on lap 1, a red-flag lap or the driver's last recorded lap"
+DQ-LAP-004,flag,lap,"Green-flag, non-pit lap slower than 1.3x the session median"
+DQ-LAP-005,reject,lap,Sector times differ from lap_duration by more than 0.05 s
+DQ-STINT-001,reject,stint,"Stint ends before it starts, or leaves a gap or overlap with the previous stint"
+DQ-STINT-002,flag,stint,Driver's last stint ends on a different lap from their last recorded lap
+DQ-STINT-003,reject,stint,"Compound is missing or not one of SOFT, MEDIUM, HARD, INTERMEDIATE, WET, UNKNOWN"
+DQ-STINT-004,flag,stint,Compound is UNKNOWN
+DQ-PIT-001,flag,pit,lane_duration over 60 s
+DQ-PIT-002,warn,pit,stop_duration is null
+DQ-POS-001,reject,position,Position is not a whole number from 1 to 22
+DQ-POS-002,reject,position,More than one position row for the same driver at the same timestamp
+DQ-POS-003,reject,position,Driver number is not in the session's drivers
+DQ-POS-004,flag,position,Two or more drivers hold the same position for more than 10 s
+DQ-INT-001,reject,interval,"interval or gap_to_leader is not a number, null or text like '+1 LAP'"
+DQ-INT-002,reject,interval,interval or gap_to_leader is negative
+DQ-INT-003,flag,interval,gap_to_leader is smaller than interval
+DQ-SESS-001,reject,driver,Driver number is mapped to more than one team in a session
+DQ-SESS-002,warn,session,Endpoint returned no rows for a finished session
+DQ-FRESH-001,warn,session,Finished session has not been ingested after the allowed delay

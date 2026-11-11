@@ -6,7 +6,8 @@
 ## Context
 The first release covered one season, so every circuit appeared once and some conclusions rested on a
 handful of races. 2023 and 2025 were added with the same pipeline (races and sprints, eight endpoints).
-Completed 2026 sessions were not ingested.
+Completed 2026 sessions are not part of the analysis (the weekly schedule does ingest and validate the
+current year into S3, but nothing loads or models them).
 
 ## Decisions
 1. **Ingest:** 28 sessions for 2023 (the cancelled Imola race is skipped by `is_cancelled`), 30 for 2024
@@ -52,4 +53,5 @@ Completed 2026 sessions were not ingested.
 
 ## Consequences
 - The README and dashboard must report per-season and pooled figures, with these caveats.
-- 2026 sessions are not ingested. Nothing here is a claim about other regulations.
+- 2026 sessions are stored by the weekly schedule but not loaded or analysed. Nothing here is a claim
+  about other regulations.

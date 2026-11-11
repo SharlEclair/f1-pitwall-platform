@@ -1,0 +1,110 @@
+table undercut_grid
+
+	column grid_id
+		dataType: int64
+		formatString: 0
+		summarizeBy: none
+		sourceColumn: grid_id
+
+	column gap_threshold_s
+		dataType: double
+		summarizeBy: none
+		sourceColumn: gap_threshold_s
+
+	column response_window_laps
+		dataType: int64
+		formatString: 0
+		summarizeBy: none
+		sourceColumn: response_window_laps
+
+	column exclude_neutralised
+		dataType: string
+		summarizeBy: none
+		sourceColumn: exclude_neutralised
+
+	column is_primary
+		dataType: string
+		summarizeBy: none
+		sourceColumn: is_primary
+
+	column season_scope
+		dataType: string
+		summarizeBy: none
+		sourceColumn: season_scope
+
+	column n_attempts
+		dataType: int64
+		formatString: 0
+		summarizeBy: none
+		sourceColumn: n_attempts
+
+	column n_success
+		dataType: int64
+		formatString: 0
+		summarizeBy: none
+		sourceColumn: n_success
+
+	column n_failure
+		dataType: int64
+		formatString: 0
+		summarizeBy: none
+		sourceColumn: n_failure
+
+	column n_inconclusive
+		dataType: int64
+		formatString: 0
+		summarizeBy: none
+		sourceColumn: n_inconclusive
+
+	column n_sessions
+		dataType: int64
+		formatString: 0
+		summarizeBy: none
+		sourceColumn: n_sessions
+
+	column n_decided
+		dataType: int64
+		formatString: 0
+		summarizeBy: none
+		sourceColumn: n_decided
+
+	column success_rate
+		dataType: double
+		summarizeBy: none
+		sourceColumn: success_rate
+
+	column wilson_low
+		dataType: double
+		summarizeBy: none
+		sourceColumn: wilson_low
+
+	column wilson_high
+		dataType: double
+		summarizeBy: none
+		sourceColumn: wilson_high
+
+	column treatment
+		dataType: string
+		summarizeBy: none
+		sourceColumn: treatment
+
+	/// Success rate in the current grid cell(s), pooled over seasons
+	measure 'Undercut Rate' = CALCULATE ( DIVIDE ( SUM ( undercut_grid[n_success] ), SUM ( undercut_grid[n_decided] ) ), undercut_grid[season_scope] = "all" )
+		formatString: 0%
+		displayFolder: "Undercut"
+
+	measure 'Undercut Decided' = CALCULATE ( SUM ( undercut_grid[n_decided] ), undercut_grid[season_scope] = "all" )
+		formatString: #,0
+		displayFolder: "Undercut"
+
+	partition undercut_grid = m
+		mode: import
+		source =
+				let
+				    Source = Csv.Document(File.Contents(DataFolder & "\undercut_grid.csv"), [Delimiter = ",", Encoding = 65001, QuoteStyle = QuoteStyle.Csv]),
+				    Promoted = Table.PromoteHeaders(Source, [PromoteAllScalars = true]),
+				    Typed = Table.TransformColumnTypes(Promoted, {{"grid_id", Int64.Type}, {"gap_threshold_s", type number}, {"response_window_laps", Int64.Type}, {"exclude_neutralised", type text}, {"is_primary", type text}, {"season_scope", type text}, {"n_attempts", Int64.Type}, {"n_success", Int64.Type}, {"n_failure", Int64.Type}, {"n_inconclusive", Int64.Type}, {"n_sessions", Int64.Type}, {"n_decided", Int64.Type}, {"success_rate", type number}, {"wilson_low", type number}, {"wilson_high", type number}, {"treatment", type text}}, "en-US")
+				in
+				    Typed
+
+	annotation PBI_ResultType = Table

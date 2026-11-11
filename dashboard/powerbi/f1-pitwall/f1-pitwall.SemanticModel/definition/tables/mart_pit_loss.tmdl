@@ -1,0 +1,86 @@
+table mart_pit_loss
+
+	column session_key
+		dataType: string
+		isHidden
+		summarizeBy: none
+		sourceColumn: session_key
+
+	column season
+		dataType: int64
+		formatString: 0
+		isHidden
+		summarizeBy: none
+		sourceColumn: season
+
+	column circuit_short_name
+		dataType: string
+		summarizeBy: none
+		sourceColumn: circuit_short_name
+
+	column track_status
+		dataType: string
+		summarizeBy: none
+		sourceColumn: track_status
+
+	column n_stops
+		dataType: int64
+		formatString: 0
+		summarizeBy: none
+		sourceColumn: n_stops
+
+	column n_stops_with_loss
+		dataType: int64
+		formatString: 0
+		summarizeBy: none
+		sourceColumn: n_stops_with_loss
+
+	column median_lane_duration_s
+		dataType: double
+		summarizeBy: none
+		sourceColumn: median_lane_duration_s
+
+	column n_stops_with_stationary_time
+		dataType: int64
+		formatString: 0
+		summarizeBy: none
+		sourceColumn: n_stops_with_stationary_time
+
+	column median_stop_duration_s
+		dataType: double
+		summarizeBy: none
+		sourceColumn: median_stop_duration_s
+
+	column median_pit_loss_s
+		dataType: double
+		summarizeBy: none
+		sourceColumn: median_pit_loss_s
+
+	/// Median of per-race median pit loss in the current context
+	measure 'Pit Loss' = MEDIAN ( mart_pit_loss[median_pit_loss_s] )
+		formatString: 0.0" s"
+		displayFolder: "Pit stop"
+
+	measure 'Pit Loss GREEN' = CALCULATE ( MEDIAN ( mart_pit_loss[median_pit_loss_s] ), mart_pit_loss[track_status] = "GREEN" )
+		formatString: 0.0" s"
+		displayFolder: "Pit stop"
+
+	measure 'Pit Loss SC' = CALCULATE ( MEDIAN ( mart_pit_loss[median_pit_loss_s] ), mart_pit_loss[track_status] = "SC" )
+		formatString: 0.0" s"
+		displayFolder: "Pit stop"
+
+	measure 'Pit Loss VSC' = CALCULATE ( MEDIAN ( mart_pit_loss[median_pit_loss_s] ), mart_pit_loss[track_status] = "VSC" )
+		formatString: 0.0" s"
+		displayFolder: "Pit stop"
+
+	partition mart_pit_loss = m
+		mode: import
+		source =
+				let
+				    Source = Csv.Document(File.Contents(DataFolder & "\mart_pit_loss.csv"), [Delimiter = ",", Encoding = 65001, QuoteStyle = QuoteStyle.Csv]),
+				    Promoted = Table.PromoteHeaders(Source, [PromoteAllScalars = true]),
+				    Typed = Table.TransformColumnTypes(Promoted, {{"session_key", type text}, {"season", Int64.Type}, {"circuit_short_name", type text}, {"track_status", type text}, {"n_stops", Int64.Type}, {"n_stops_with_loss", Int64.Type}, {"median_lane_duration_s", type number}, {"n_stops_with_stationary_time", Int64.Type}, {"median_stop_duration_s", type number}, {"median_pit_loss_s", type number}}, "en-US")
+				in
+				    Typed
+
+	annotation PBI_ResultType = Table

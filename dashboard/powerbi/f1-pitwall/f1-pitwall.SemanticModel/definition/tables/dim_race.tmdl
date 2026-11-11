@@ -1,0 +1,45 @@
+table dim_race
+
+	column session_key
+		dataType: string
+		summarizeBy: none
+		sourceColumn: session_key
+
+	column season
+		dataType: int64
+		formatString: 0
+		summarizeBy: none
+		sourceColumn: season
+
+	column circuit_short_name
+		dataType: string
+		summarizeBy: none
+		sourceColumn: circuit_short_name
+
+	column session_name
+		dataType: string
+		summarizeBy: none
+		sourceColumn: session_name
+
+	column race_date
+		dataType: dateTime
+		formatString: yyyy-mm-dd
+		summarizeBy: none
+		sourceColumn: race_date
+
+	column race_label
+		dataType: string
+		summarizeBy: none
+		sourceColumn: race_label
+
+	partition dim_race = m
+		mode: import
+		source =
+				let
+				    Source = Csv.Document(File.Contents(DataFolder & "\dim_race.csv"), [Delimiter = ",", Encoding = 65001, QuoteStyle = QuoteStyle.Csv]),
+				    Promoted = Table.PromoteHeaders(Source, [PromoteAllScalars = true]),
+				    Typed = Table.TransformColumnTypes(Promoted, {{"session_key", type text}, {"season", Int64.Type}, {"circuit_short_name", type text}, {"session_name", type text}, {"race_date", type date}, {"race_label", type text}}, "en-US")
+				in
+				    Typed
+
+	annotation PBI_ResultType = Table

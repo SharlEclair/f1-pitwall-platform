@@ -1,0 +1,53 @@
+table undercut_primary
+
+	column gap_threshold_s
+		dataType: double
+		summarizeBy: none
+		sourceColumn: gap_threshold_s
+
+	column response_window_laps
+		dataType: int64
+		formatString: 0
+		summarizeBy: none
+		sourceColumn: response_window_laps
+
+	column rate
+		dataType: double
+		summarizeBy: none
+		sourceColumn: rate
+
+	column ci_low
+		dataType: double
+		summarizeBy: none
+		sourceColumn: ci_low
+
+	column ci_high
+		dataType: double
+		summarizeBy: none
+		sourceColumn: ci_high
+
+	column n_races
+		dataType: int64
+		formatString: 0
+		summarizeBy: none
+		sourceColumn: n_races
+
+	/// Primary definition (gap <= 3 s, 3-lap window, no neutralised laps)
+	measure 'Primary Rate' = AVERAGE ( undercut_primary[rate] )
+		formatString: 0.0%
+		displayFolder: "Undercut"
+
+	measure 'Primary Interval Text' = "95% interval over races: " & FORMAT ( AVERAGE ( undercut_primary[ci_low] ), "0%" ) & " to " & FORMAT ( AVERAGE ( undercut_primary[ci_high] ), "0%" )
+		displayFolder: "Undercut"
+
+	partition undercut_primary = m
+		mode: import
+		source =
+				let
+				    Source = Csv.Document(File.Contents(DataFolder & "\undercut_primary.csv"), [Delimiter = ",", Encoding = 65001, QuoteStyle = QuoteStyle.Csv]),
+				    Promoted = Table.PromoteHeaders(Source, [PromoteAllScalars = true]),
+				    Typed = Table.TransformColumnTypes(Promoted, {{"gap_threshold_s", type number}, {"response_window_laps", Int64.Type}, {"rate", type number}, {"ci_low", type number}, {"ci_high", type number}, {"n_races", Int64.Type}}, "en-US")
+				in
+				    Typed
+
+	annotation PBI_ResultType = Table

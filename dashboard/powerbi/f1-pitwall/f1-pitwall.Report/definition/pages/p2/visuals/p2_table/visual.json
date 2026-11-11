@@ -1,0 +1,156 @@
+{
+  "$schema": "https://developer.microsoft.com/json-schemas/fabric/item/report/definition/visualContainer/2.7.0/schema.json",
+  "name": "p2_table",
+  "position": {
+    "x": 654,
+    "y": 264,
+    "z": 0,
+    "width": 600,
+    "height": 422
+  },
+  "visual": {
+    "visualType": "tableEx",
+    "query": {
+      "queryState": {
+        "Values": {
+          "projections": [
+            {
+              "field": {
+                "Column": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "pit_loss_by_season"
+                    }
+                  },
+                  "Property": "season"
+                }
+              },
+              "queryRef": "pit_loss_by_season.season",
+              "nativeQueryRef": "season"
+            },
+            {
+              "field": {
+                "Column": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "pit_loss_by_season"
+                    }
+                  },
+                  "Property": "track_status"
+                }
+              },
+              "queryRef": "pit_loss_by_season.track_status",
+              "nativeQueryRef": "track_status"
+            },
+            {
+              "field": {
+                "Column": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "pit_loss_by_season"
+                    }
+                  },
+                  "Property": "median_pit_loss_s"
+                }
+              },
+              "queryRef": "pit_loss_by_season.median_pit_loss_s",
+              "nativeQueryRef": "median_pit_loss_s"
+            },
+            {
+              "field": {
+                "Column": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "pit_loss_by_season"
+                    }
+                  },
+                  "Property": "stops"
+                }
+              },
+              "queryRef": "pit_loss_by_season.stops",
+              "nativeQueryRef": "stops"
+            },
+            {
+              "field": {
+                "Column": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "pit_loss_by_season"
+                    }
+                  },
+                  "Property": "races"
+                }
+              },
+              "queryRef": "pit_loss_by_season.races",
+              "nativeQueryRef": "races"
+            }
+          ]
+        }
+      }
+    },
+    "visualContainerObjects": {
+      "title": [
+        {
+          "properties": {
+            "show": {
+              "expr": {
+                "Literal": {
+                  "Value": "true"
+                }
+              }
+            },
+            "text": {
+              "expr": {
+                "Literal": {
+                  "Value": "'Season, status, stops and races behind each figure'"
+                }
+              }
+            },
+            "fontSize": {
+              "expr": {
+                "Literal": {
+                  "Value": "11D"
+                }
+              }
+            },
+            "bold": {
+              "expr": {
+                "Literal": {
+                  "Value": "true"
+                }
+              }
+            },
+            "fontColor": {
+              "solid": {
+                "color": {
+                  "expr": {
+                    "Literal": {
+                      "Value": "'#E8EAED'"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      ],
+      "general": [
+        {
+          "properties": {
+            "altText": {
+              "expr": {
+                "Literal": {
+                  "Value": "'Season, status, stops and races behind each figure'"
+                }
+              }
+            }
+          }
+        }
+      ]
+    },
+    "drillFilterOtherVisuals": true
+  },
+  "filterConfig": {
+    "filters": []
+  }
+}

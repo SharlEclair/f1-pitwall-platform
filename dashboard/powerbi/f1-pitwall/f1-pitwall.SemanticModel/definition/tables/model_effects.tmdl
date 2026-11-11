@@ -1,0 +1,38 @@
+table model_effects
+
+	column effect
+		dataType: string
+		summarizeBy: none
+		sourceColumn: effect
+
+	column estimate_s_per_lap
+		dataType: double
+		summarizeBy: none
+		sourceColumn: estimate_s_per_lap
+
+	column ci_low
+		dataType: double
+		summarizeBy: none
+		sourceColumn: ci_low
+
+	column ci_high
+		dataType: double
+		summarizeBy: none
+		sourceColumn: ci_high
+
+	column assumed_fuel_effect_s_per_lap
+		dataType: double
+		summarizeBy: none
+		sourceColumn: assumed_fuel_effect_s_per_lap
+
+	partition model_effects = m
+		mode: import
+		source =
+				let
+				    Source = Csv.Document(File.Contents(DataFolder & "\model_effects.csv"), [Delimiter = ",", Encoding = 65001, QuoteStyle = QuoteStyle.Csv]),
+				    Promoted = Table.PromoteHeaders(Source, [PromoteAllScalars = true]),
+				    Typed = Table.TransformColumnTypes(Promoted, {{"effect", type text}, {"estimate_s_per_lap", type number}, {"ci_low", type number}, {"ci_high", type number}, {"assumed_fuel_effect_s_per_lap", type number}}, "en-US")
+				in
+				    Typed
+
+	annotation PBI_ResultType = Table

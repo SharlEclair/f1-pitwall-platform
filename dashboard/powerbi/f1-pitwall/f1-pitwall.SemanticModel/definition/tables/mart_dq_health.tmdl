@@ -1,0 +1,68 @@
+table mart_dq_health
+
+	column session_key
+		dataType: string
+		isHidden
+		summarizeBy: none
+		sourceColumn: session_key
+
+	column season
+		dataType: int64
+		formatString: 0
+		summarizeBy: none
+		sourceColumn: season
+
+	column circuit_short_name
+		dataType: string
+		summarizeBy: none
+		sourceColumn: circuit_short_name
+
+	column session_name
+		dataType: string
+		summarizeBy: none
+		sourceColumn: session_name
+
+	column rule_code
+		dataType: string
+		summarizeBy: none
+		sourceColumn: rule_code
+
+	column outcome
+		dataType: string
+		summarizeBy: none
+		sourceColumn: outcome
+
+	column n_rows
+		dataType: int64
+		formatString: 0
+		summarizeBy: none
+		sourceColumn: n_rows
+
+	measure 'Quarantined Rows' = CALCULATE ( SUM ( mart_dq_health[n_rows] ), mart_dq_health[outcome] = "quarantined" )
+		formatString: #,0
+		displayFolder: "Data quality"
+
+	measure 'Flagged Rows' = CALCULATE ( SUM ( mart_dq_health[n_rows] ), mart_dq_health[outcome] = "flagged" )
+		formatString: #,0
+		displayFolder: "Data quality"
+
+	measure 'DQ Rows' = SUM ( mart_dq_health[n_rows] )
+		formatString: #,0
+		displayFolder: "Data quality"
+
+	/// Rules that fired at least once in the current context
+	measure 'Rules Fired' = DISTINCTCOUNT ( mart_dq_health[rule_code] )
+		formatString: 0
+		displayFolder: "Data quality"
+
+	partition mart_dq_health = m
+		mode: import
+		source =
+				let
+				    Source = Csv.Document(File.Contents(DataFolder & "\mart_dq_health.csv"), [Delimiter = ",", Encoding = 65001, QuoteStyle = QuoteStyle.Csv]),
+				    Promoted = Table.PromoteHeaders(Source, [PromoteAllScalars = true]),
+				    Typed = Table.TransformColumnTypes(Promoted, {{"session_key", type text}, {"season", Int64.Type}, {"circuit_short_name", type text}, {"session_name", type text}, {"rule_code", type text}, {"outcome", type text}, {"n_rows", Int64.Type}}, "en-US")
+				in
+				    Typed
+
+	annotation PBI_ResultType = Table

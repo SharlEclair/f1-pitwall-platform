@@ -1,0 +1,59 @@
+table pit_loss_by_season
+
+	column season
+		dataType: int64
+		formatString: 0
+		summarizeBy: none
+		sourceColumn: season
+
+	column track_status
+		dataType: string
+		summarizeBy: none
+		sourceColumn: track_status
+
+	column median_pit_loss_s
+		dataType: double
+		summarizeBy: none
+		sourceColumn: median_pit_loss_s
+
+	column stops
+		dataType: int64
+		formatString: 0
+		summarizeBy: none
+		sourceColumn: stops
+
+	column races
+		dataType: int64
+		formatString: 0
+		summarizeBy: none
+		sourceColumn: races
+
+	measure 'Green Range Text' = VAR lo = CALCULATE ( MIN ( pit_loss_by_season[median_pit_loss_s] ), pit_loss_by_season[track_status] = "GREEN", ALL ( dim_season ) ) VAR hi = CALCULATE ( MAX ( pit_loss_by_season[median_pit_loss_s] ), pit_loss_by_season[track_status] = "GREEN", ALL ( dim_season ) ) RETURN "Stable across seasons: " & FORMAT ( lo, "0.0" ) & " to " & FORMAT ( hi, "0.0" ) & " s"
+		displayFolder: "Pit stop"
+
+	measure 'SC Range Text' = VAR lo = CALCULATE ( MIN ( pit_loss_by_season[median_pit_loss_s] ), pit_loss_by_season[track_status] = "SC", ALL ( dim_season ) ) VAR hi = CALCULATE ( MAX ( pit_loss_by_season[median_pit_loss_s] ), pit_loss_by_season[track_status] = "SC", ALL ( dim_season ) ) RETURN "Unstable by season: " & FORMAT ( lo, "0.0" ) & " to " & FORMAT ( hi, "0.0" ) & " s"
+		displayFolder: "Pit stop"
+
+	measure 'VSC Range Text' = VAR lo = CALCULATE ( MIN ( pit_loss_by_season[median_pit_loss_s] ), pit_loss_by_season[track_status] = "VSC", ALL ( dim_season ) ) VAR hi = CALCULATE ( MAX ( pit_loss_by_season[median_pit_loss_s] ), pit_loss_by_season[track_status] = "VSC", ALL ( dim_season ) ) RETURN "Unstable by season: " & FORMAT ( lo, "0.0" ) & " to " & FORMAT ( hi, "0.0" ) & " s"
+		displayFolder: "Pit stop"
+
+	/// Median pit loss for one season and status
+	measure 'Pit Loss Season' = AVERAGE ( pit_loss_by_season[median_pit_loss_s] )
+		formatString: 0.0" s"
+		displayFolder: "Pit stop"
+
+	measure 'Stops Season Status' = SUM ( pit_loss_by_season[stops] )
+		formatString: #,0
+		displayFolder: "Pit stop"
+
+	partition pit_loss_by_season = m
+		mode: import
+		source =
+				let
+				    Source = Csv.Document(File.Contents(DataFolder & "\pit_loss_by_season.csv"), [Delimiter = ",", Encoding = 65001, QuoteStyle = QuoteStyle.Csv]),
+				    Promoted = Table.PromoteHeaders(Source, [PromoteAllScalars = true]),
+				    Typed = Table.TransformColumnTypes(Promoted, {{"season", Int64.Type}, {"track_status", type text}, {"median_pit_loss_s", type number}, {"stops", Int64.Type}, {"races", Int64.Type}}, "en-US")
+				in
+				    Typed
+
+	annotation PBI_ResultType = Table

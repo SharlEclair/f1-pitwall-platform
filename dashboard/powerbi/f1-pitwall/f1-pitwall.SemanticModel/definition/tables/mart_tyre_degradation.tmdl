@@ -1,0 +1,125 @@
+table mart_tyre_degradation
+
+	column session_key
+		dataType: string
+		isHidden
+		summarizeBy: none
+		sourceColumn: session_key
+
+	column season
+		dataType: int64
+		formatString: 0
+		isHidden
+		summarizeBy: none
+		sourceColumn: season
+
+	column circuit_short_name
+		dataType: string
+		summarizeBy: none
+		sourceColumn: circuit_short_name
+
+	column session_name
+		dataType: string
+		summarizeBy: none
+		sourceColumn: session_name
+
+	column compound
+		dataType: string
+		summarizeBy: none
+		sourceColumn: compound
+
+	column n_clean_laps
+		dataType: int64
+		formatString: 0
+		summarizeBy: none
+		sourceColumn: n_clean_laps
+
+	column n_stints
+		dataType: int64
+		formatString: 0
+		summarizeBy: none
+		sourceColumn: n_stints
+
+	column slope_s_per_lap
+		dataType: double
+		summarizeBy: none
+		sourceColumn: slope_s_per_lap
+
+	column slope_uncorrected
+		dataType: double
+		summarizeBy: none
+		sourceColumn: slope_uncorrected
+
+	column slope_pooled_s_per_lap
+		dataType: double
+		summarizeBy: none
+		sourceColumn: slope_pooled_s_per_lap
+
+	column censored_stint_share
+		dataType: double
+		summarizeBy: none
+		sourceColumn: censored_stint_share
+
+	/// Median within-stint slope, assumed 0.04 s/lap fuel effect
+	measure 'Slope HARD' = CALCULATE ( MEDIAN ( mart_tyre_degradation[slope_s_per_lap] ), mart_tyre_degradation[compound] = "HARD" )
+		formatString: +0.000" s/lap";-0.000" s/lap"
+		displayFolder: "Tyre degradation"
+
+	measure 'Slope MEDIUM' = CALCULATE ( MEDIAN ( mart_tyre_degradation[slope_s_per_lap] ), mart_tyre_degradation[compound] = "MEDIUM" )
+		formatString: +0.000" s/lap";-0.000" s/lap"
+		displayFolder: "Tyre degradation"
+
+	measure 'Slope SOFT' = CALCULATE ( MEDIAN ( mart_tyre_degradation[slope_s_per_lap] ), mart_tyre_degradation[compound] = "SOFT" )
+		formatString: +0.000" s/lap";-0.000" s/lap"
+		displayFolder: "Tyre degradation"
+
+	/// Median slope in the current filter context
+	measure 'Slope Median' = MEDIAN ( mart_tyre_degradation[slope_s_per_lap] )
+		formatString: +0.000" s/lap";-0.000" s/lap"
+		displayFolder: "Tyre degradation"
+
+	measure 'Slope Uncorrected Median' = MEDIAN ( mart_tyre_degradation[slope_uncorrected] )
+		formatString: +0.000" s/lap";-0.000" s/lap"
+		displayFolder: "Tyre degradation"
+
+	measure 'Fits HARD' = CALCULATE ( COUNTROWS ( FILTER ( mart_tyre_degradation, NOT ISBLANK ( mart_tyre_degradation[slope_s_per_lap] ) ) ), mart_tyre_degradation[compound] = "HARD" )
+		formatString: 0
+		displayFolder: "Tyre degradation"
+
+	measure 'Fits MEDIUM' = CALCULATE ( COUNTROWS ( FILTER ( mart_tyre_degradation, NOT ISBLANK ( mart_tyre_degradation[slope_s_per_lap] ) ) ), mart_tyre_degradation[compound] = "MEDIUM" )
+		formatString: 0
+		displayFolder: "Tyre degradation"
+
+	measure 'Fits SOFT' = CALCULATE ( COUNTROWS ( FILTER ( mart_tyre_degradation, NOT ISBLANK ( mart_tyre_degradation[slope_s_per_lap] ) ) ), mart_tyre_degradation[compound] = "SOFT" )
+		formatString: 0
+		displayFolder: "Tyre degradation"
+
+	measure 'Slope HARD Caption' = "HARD, median of " & [Fits HARD] & " race fits"
+		displayFolder: "Tyre degradation"
+
+	measure 'Slope MEDIUM Caption' = "MEDIUM, median of " & [Fits MEDIUM] & " race fits"
+		displayFolder: "Tyre degradation"
+
+	measure 'Slope SOFT Caption' = "SOFT, median of " & [Fits SOFT] & " race fits"
+		displayFolder: "Tyre degradation"
+
+	/// One race and compound per point
+	measure 'Fit Slope' = SELECTEDVALUE ( mart_tyre_degradation[slope_s_per_lap] )
+		formatString: +0.000;-0.000
+		displayFolder: "Plot helpers"
+
+	measure 'Fit Clean Laps' = SUM ( mart_tyre_degradation[n_clean_laps] )
+		formatString: #,0
+		displayFolder: "Plot helpers"
+
+	partition mart_tyre_degradation = m
+		mode: import
+		source =
+				let
+				    Source = Csv.Document(File.Contents(DataFolder & "\mart_tyre_degradation.csv"), [Delimiter = ",", Encoding = 65001, QuoteStyle = QuoteStyle.Csv]),
+				    Promoted = Table.PromoteHeaders(Source, [PromoteAllScalars = true]),
+				    Typed = Table.TransformColumnTypes(Promoted, {{"session_key", type text}, {"season", Int64.Type}, {"circuit_short_name", type text}, {"session_name", type text}, {"compound", type text}, {"n_clean_laps", Int64.Type}, {"n_stints", Int64.Type}, {"slope_s_per_lap", type number}, {"slope_uncorrected", type number}, {"slope_pooled_s_per_lap", type number}, {"censored_stint_share", type number}}, "en-US")
+				in
+				    Typed
+
+	annotation PBI_ResultType = Table

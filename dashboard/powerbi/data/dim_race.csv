@@ -1,0 +1,89 @@
+session_key,season,circuit_short_name,session_name,race_date,race_label
+7953,2023,Sakhir,Race,2023-03-05,Sakhir 2023
+7779,2023,Jeddah,Race,2023-03-19,Jeddah 2023
+7787,2023,Melbourne,Race,2023-04-02,Melbourne 2023
+9069,2023,Baku,Sprint,2023-04-29,Baku 2023 (Sprint)
+9070,2023,Baku,Race,2023-04-30,Baku 2023
+9078,2023,Miami,Race,2023-05-07,Miami 2023
+9094,2023,Monte Carlo,Race,2023-05-28,Monte Carlo 2023
+9102,2023,Catalunya,Race,2023-06-04,Catalunya 2023
+9110,2023,Montreal,Race,2023-06-18,Montreal 2023
+9117,2023,Spielberg,Sprint,2023-07-01,Spielberg 2023 (Sprint)
+9118,2023,Spielberg,Race,2023-07-02,Spielberg 2023
+9126,2023,Silverstone,Race,2023-07-09,Silverstone 2023
+9133,2023,Hungaroring,Race,2023-07-23,Hungaroring 2023
+9140,2023,Spa-Francorchamps,Sprint,2023-07-29,Spa-Francorchamps 2023 (Sprint)
+9141,2023,Spa-Francorchamps,Race,2023-07-30,Spa-Francorchamps 2023
+9149,2023,Zandvoort,Race,2023-08-27,Zandvoort 2023
+9157,2023,Monza,Race,2023-09-03,Monza 2023
+9165,2023,Singapore,Race,2023-09-17,Singapore 2023
+9173,2023,Suzuka,Race,2023-09-24,Suzuka 2023
+9220,2023,Lusail,Sprint,2023-10-07,Lusail 2023 (Sprint)
+9221,2023,Lusail,Race,2023-10-08,Lusail 2023
+9212,2023,Austin,Sprint,2023-10-21,Austin 2023 (Sprint)
+9213,2023,Austin,Race,2023-10-22,Austin 2023
+9181,2023,Mexico City,Race,2023-10-29,Mexico City 2023
+9204,2023,Interlagos,Sprint,2023-11-04,Interlagos 2023 (Sprint)
+9205,2023,Interlagos,Race,2023-11-05,Interlagos 2023
+9189,2023,Las Vegas,Race,2023-11-19,Las Vegas 2023
+9197,2023,Yas Marina Circuit,Race,2023-11-26,Yas Marina Circuit 2023
+9472,2024,Sakhir,Race,2024-03-02,Sakhir 2024
+9480,2024,Jeddah,Race,2024-03-09,Jeddah 2024
+9488,2024,Melbourne,Race,2024-03-24,Melbourne 2024
+9496,2024,Suzuka,Race,2024-04-07,Suzuka 2024
+9672,2024,Shanghai,Sprint,2024-04-20,Shanghai 2024 (Sprint)
+9673,2024,Shanghai,Race,2024-04-21,Shanghai 2024
+9506,2024,Miami,Sprint,2024-05-04,Miami 2024 (Sprint)
+9507,2024,Miami,Race,2024-05-05,Miami 2024
+9515,2024,Imola,Race,2024-05-19,Imola 2024
+9523,2024,Monte Carlo,Race,2024-05-26,Monte Carlo 2024
+9531,2024,Montreal,Race,2024-06-09,Montreal 2024
+9539,2024,Catalunya,Race,2024-06-23,Catalunya 2024
+9549,2024,Spielberg,Sprint,2024-06-29,Spielberg 2024 (Sprint)
+9550,2024,Spielberg,Race,2024-06-30,Spielberg 2024
+9558,2024,Silverstone,Race,2024-07-07,Silverstone 2024
+9566,2024,Hungaroring,Race,2024-07-21,Hungaroring 2024
+9574,2024,Spa-Francorchamps,Race,2024-07-28,Spa-Francorchamps 2024
+9582,2024,Zandvoort,Race,2024-08-25,Zandvoort 2024
+9590,2024,Monza,Race,2024-09-01,Monza 2024
+9598,2024,Baku,Race,2024-09-15,Baku 2024
+9606,2024,Singapore,Race,2024-09-22,Singapore 2024
+9616,2024,Austin,Sprint,2024-10-19,Austin 2024 (Sprint)
+9617,2024,Austin,Race,2024-10-20,Austin 2024
+9625,2024,Mexico City,Race,2024-10-27,Mexico City 2024
+9635,2024,Interlagos,Sprint,2024-11-02,Interlagos 2024 (Sprint)
+9636,2024,Interlagos,Race,2024-11-03,Interlagos 2024
+9644,2024,Las Vegas,Race,2024-11-24,Las Vegas 2024
+9654,2024,Lusail,Sprint,2024-11-30,Lusail 2024 (Sprint)
+9655,2024,Lusail,Race,2024-12-01,Lusail 2024
+9662,2024,Yas Marina Circuit,Race,2024-12-08,Yas Marina Circuit 2024
+9693,2025,Melbourne,Race,2025-03-16,Melbourne 2025
+9993,2025,Shanghai,Sprint,2025-03-22,Shanghai 2025 (Sprint)
+9998,2025,Shanghai,Race,2025-03-23,Shanghai 2025
+10006,2025,Suzuka,Race,2025-04-06,Suzuka 2025
+10014,2025,Sakhir,Race,2025-04-13,Sakhir 2025
+10022,2025,Jeddah,Race,2025-04-20,Jeddah 2025
+10028,2025,Miami,Sprint,2025-05-03,Miami 2025 (Sprint)
+10033,2025,Miami,Race,2025-05-04,Miami 2025
+9987,2025,Imola,Race,2025-05-18,Imola 2025
+9979,2025,Monte Carlo,Race,2025-05-25,Monte Carlo 2025
+9971,2025,Catalunya,Race,2025-06-01,Catalunya 2025
+9963,2025,Montreal,Race,2025-06-15,Montreal 2025
+9955,2025,Spielberg,Race,2025-06-29,Spielberg 2025
+9947,2025,Silverstone,Race,2025-07-06,Silverstone 2025
+9934,2025,Spa-Francorchamps,Sprint,2025-07-26,Spa-Francorchamps 2025 (Sprint)
+9939,2025,Spa-Francorchamps,Race,2025-07-27,Spa-Francorchamps 2025
+9928,2025,Hungaroring,Race,2025-08-03,Hungaroring 2025
+9920,2025,Zandvoort,Race,2025-08-31,Zandvoort 2025
+9912,2025,Monza,Race,2025-09-07,Monza 2025
+9904,2025,Baku,Race,2025-09-21,Baku 2025
+9896,2025,Singapore,Race,2025-10-05,Singapore 2025
+9883,2025,Austin,Sprint,2025-10-18,Austin 2025 (Sprint)
+9888,2025,Austin,Race,2025-10-19,Austin 2025
+9877,2025,Mexico City,Race,2025-10-26,Mexico City 2025
+9864,2025,Interlagos,Sprint,2025-11-08,Interlagos 2025 (Sprint)
+9869,2025,Interlagos,Race,2025-11-09,Interlagos 2025
+9858,2025,Las Vegas,Race,2025-11-23,Las Vegas 2025
+9845,2025,Lusail,Sprint,2025-11-29,Lusail 2025 (Sprint)
+9850,2025,Lusail,Race,2025-11-30,Lusail 2025
+9839,2025,Yas Marina Circuit,Race,2025-12-07,Yas Marina Circuit 2025

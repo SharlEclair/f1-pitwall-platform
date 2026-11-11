@@ -1,0 +1,50 @@
+table model_summary
+
+	column method
+		dataType: string
+		summarizeBy: none
+		sourceColumn: method
+
+	column mean_mae_s
+		dataType: double
+		summarizeBy: none
+		sourceColumn: mean_mae_s
+
+	column ci_low_s
+		dataType: double
+		summarizeBy: none
+		sourceColumn: ci_low_s
+
+	column ci_high_s
+		dataType: double
+		summarizeBy: none
+		sourceColumn: ci_high_s
+
+	column all_laps_mae_s
+		dataType: double
+		summarizeBy: none
+		sourceColumn: all_laps_mae_s
+
+	measure 'Mean MAE' = AVERAGE ( model_summary[mean_mae_s] )
+		formatString: 0.000
+		displayFolder: "Model"
+
+	measure 'CI Low' = MIN ( model_summary[ci_low_s] )
+		formatString: 0.000
+		displayFolder: "Model"
+
+	measure 'CI High' = MAX ( model_summary[ci_high_s] )
+		formatString: 0.000
+		displayFolder: "Model"
+
+	partition model_summary = m
+		mode: import
+		source =
+				let
+				    Source = Csv.Document(File.Contents(DataFolder & "\model_summary.csv"), [Delimiter = ",", Encoding = 65001, QuoteStyle = QuoteStyle.Csv]),
+				    Promoted = Table.PromoteHeaders(Source, [PromoteAllScalars = true]),
+				    Typed = Table.TransformColumnTypes(Promoted, {{"method", type text}, {"mean_mae_s", type number}, {"ci_low_s", type number}, {"ci_high_s", type number}, {"all_laps_mae_s", type number}}, "en-US")
+				in
+				    Typed
+
+	annotation PBI_ResultType = Table

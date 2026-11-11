@@ -89,7 +89,8 @@ below gap to the car ahead) on 1,297 rows, most of them in two 2024 races.
 - The undercut figure is a frequency under one definition on a small sample, without control for car
   pace; position is the on-track order from the position stream, not the official classification.
 - OpenF1 documents `pit_duration` and `drivers.country_code` as removed after the 2026 season; both are
-  optional in the schema check, and 2026 sessions are not ingested.
+  optional in the schema check. The weekly schedule also ingests and validates the current year (2026)
+  into S3, but those sessions are not loaded, modelled or shown anywhere here.
 - An earlier, separate Monza simulator estimated Monza pit loss at 21.2 s (lane time minus an assumed
   3.5 s); this project's empirical estimate for Monza under green flags is 25.5 s (2023), 26.8 s (2024)
   and 24.6 s (2025). The methods differ and neither is validated. Swapping the empirical value into the
@@ -112,6 +113,32 @@ cd dbt; ..\.venv\Scripts\dbt.exe deps --profiles-dir . ; ..\.venv\Scripts\dbt.ex
 The Snowflake, AWS and model-training steps need your own accounts and credentials (never stored in
 this repo): see `warehouse/`, `infra/`, `scripts/teardown.ps1` (dry run by default),
 `python -m ml.run`, `python -m ml.season_report` and `python -m undercut.report`.
+
+## Power BI report
+
+A seven page Power BI report over the same marts: Overview, Tyres, Pit stops, Undercut, Model,
+Data quality and Limits. It ships as a PBIP project in
+[dashboard/powerbi/f1-pitwall/](dashboard/powerbi/f1-pitwall/), with a PDF export at
+[dashboard/powerbi/f1-pitwall.pdf](dashboard/powerbi/f1-pitwall.pdf) and one PNG per page in
+[dashboard/powerbi/screenshots/](dashboard/powerbi/screenshots/).
+
+![Overview](dashboard/powerbi/screenshots/page-1.png)
+![Tyre degradation](dashboard/powerbi/screenshots/page-2.png)
+
+Regenerate the inputs and the project, then open `dashboard/powerbi/f1-pitwall/f1-pitwall.pbip`:
+
+```powershell
+.\.venv\Scripts\python.exe scripts\make_powerbi_inputs.py
+.\.venv\Scripts\python.exe dashboard\powerbi\build_report.py
+```
+
+The committed project points `DataFolder` at the placeholder `C:\data\f1-pitwall`, so no local path is
+published. To refresh it, set `PBI_DATA_FOLDER` to `dashboard\powerbi\data` when you run the generator,
+or change the parameter in Desktop (Home, Transform data, Edit parameters) in a copy you keep locally.
+
+Power BI Desktop cannot save this report to a `.pbix`: `File > Save as` rejects the target with
+`'<path>' isn't a valid file path`, tried with `.pbix` and `.pbit`, in a clean folder, and with a bare
+filename. The PBIP project, the PDF and the per page PNGs are the published artefacts.
 
 ## Decisions
 

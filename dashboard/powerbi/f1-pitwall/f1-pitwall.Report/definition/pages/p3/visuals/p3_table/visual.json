@@ -1,0 +1,170 @@
+{
+  "$schema": "https://developer.microsoft.com/json-schemas/fabric/item/report/definition/visualContainer/2.7.0/schema.json",
+  "name": "p3_table",
+  "position": {
+    "x": 654,
+    "y": 478,
+    "z": 0,
+    "width": 600,
+    "height": 208
+  },
+  "visual": {
+    "visualType": "tableEx",
+    "query": {
+      "queryState": {
+        "Values": {
+          "projections": [
+            {
+              "field": {
+                "Column": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "undercut_by_season"
+                    }
+                  },
+                  "Property": "season_scope"
+                }
+              },
+              "queryRef": "undercut_by_season.season_scope",
+              "nativeQueryRef": "season_scope"
+            },
+            {
+              "field": {
+                "Column": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "undercut_by_season"
+                    }
+                  },
+                  "Property": "n_attempts"
+                }
+              },
+              "queryRef": "undercut_by_season.n_attempts",
+              "nativeQueryRef": "n_attempts"
+            },
+            {
+              "field": {
+                "Column": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "undercut_by_season"
+                    }
+                  },
+                  "Property": "n_success"
+                }
+              },
+              "queryRef": "undercut_by_season.n_success",
+              "nativeQueryRef": "n_success"
+            },
+            {
+              "field": {
+                "Column": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "undercut_by_season"
+                    }
+                  },
+                  "Property": "n_failure"
+                }
+              },
+              "queryRef": "undercut_by_season.n_failure",
+              "nativeQueryRef": "n_failure"
+            },
+            {
+              "field": {
+                "Column": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "undercut_by_season"
+                    }
+                  },
+                  "Property": "n_inconclusive"
+                }
+              },
+              "queryRef": "undercut_by_season.n_inconclusive",
+              "nativeQueryRef": "n_inconclusive"
+            },
+            {
+              "field": {
+                "Column": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "undercut_by_season"
+                    }
+                  },
+                  "Property": "success_rate"
+                }
+              },
+              "queryRef": "undercut_by_season.success_rate",
+              "nativeQueryRef": "success_rate"
+            }
+          ]
+        }
+      }
+    },
+    "visualContainerObjects": {
+      "title": [
+        {
+          "properties": {
+            "show": {
+              "expr": {
+                "Literal": {
+                  "Value": "true"
+                }
+              }
+            },
+            "text": {
+              "expr": {
+                "Literal": {
+                  "Value": "'Primary definition by season'"
+                }
+              }
+            },
+            "fontSize": {
+              "expr": {
+                "Literal": {
+                  "Value": "11D"
+                }
+              }
+            },
+            "bold": {
+              "expr": {
+                "Literal": {
+                  "Value": "true"
+                }
+              }
+            },
+            "fontColor": {
+              "solid": {
+                "color": {
+                  "expr": {
+                    "Literal": {
+                      "Value": "'#E8EAED'"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      ],
+      "general": [
+        {
+          "properties": {
+            "altText": {
+              "expr": {
+                "Literal": {
+                  "Value": "'Primary definition by season'"
+                }
+              }
+            }
+          }
+        }
+      ]
+    },
+    "drillFilterOtherVisuals": true
+  },
+  "filterConfig": {
+    "filters": []
+  }
+}

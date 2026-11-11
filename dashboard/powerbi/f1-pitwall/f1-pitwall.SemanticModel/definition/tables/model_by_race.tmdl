@@ -1,0 +1,51 @@
+table model_by_race
+
+	column session_key
+		dataType: string
+		isHidden
+		summarizeBy: none
+		sourceColumn: session_key
+
+	column season
+		dataType: int64
+		formatString: 0
+		summarizeBy: none
+		sourceColumn: season
+
+	column circuit_short_name
+		dataType: string
+		summarizeBy: none
+		sourceColumn: circuit_short_name
+
+	column n_laps
+		dataType: int64
+		formatString: 0
+		summarizeBy: none
+		sourceColumn: n_laps
+
+	column mae_b0
+		dataType: double
+		summarizeBy: none
+		sourceColumn: mae_b0
+
+	column mae_b1
+		dataType: double
+		summarizeBy: none
+		sourceColumn: mae_b1
+
+	column mae_gbm
+		dataType: double
+		summarizeBy: none
+		sourceColumn: mae_gbm
+
+	partition model_by_race = m
+		mode: import
+		source =
+				let
+				    Source = Csv.Document(File.Contents(DataFolder & "\model_by_race.csv"), [Delimiter = ",", Encoding = 65001, QuoteStyle = QuoteStyle.Csv]),
+				    Promoted = Table.PromoteHeaders(Source, [PromoteAllScalars = true]),
+				    Typed = Table.TransformColumnTypes(Promoted, {{"session_key", type text}, {"season", Int64.Type}, {"circuit_short_name", type text}, {"n_laps", Int64.Type}, {"mae_b0", type number}, {"mae_b1", type number}, {"mae_gbm", type number}}, "en-US")
+				in
+				    Typed
+
+	annotation PBI_ResultType = Table

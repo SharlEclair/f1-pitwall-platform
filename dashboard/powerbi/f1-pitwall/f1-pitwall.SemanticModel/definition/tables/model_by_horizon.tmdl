@@ -1,0 +1,39 @@
+table model_by_horizon
+
+	column horizon
+		dataType: string
+		summarizeBy: none
+		sourceColumn: horizon
+
+	column n
+		dataType: int64
+		formatString: 0
+		summarizeBy: none
+		sourceColumn: n
+
+	column err_b0
+		dataType: double
+		summarizeBy: none
+		sourceColumn: err_b0
+
+	column err_b1
+		dataType: double
+		summarizeBy: none
+		sourceColumn: err_b1
+
+	column err_gbm
+		dataType: double
+		summarizeBy: none
+		sourceColumn: err_gbm
+
+	partition model_by_horizon = m
+		mode: import
+		source =
+				let
+				    Source = Csv.Document(File.Contents(DataFolder & "\model_by_horizon.csv"), [Delimiter = ",", Encoding = 65001, QuoteStyle = QuoteStyle.Csv]),
+				    Promoted = Table.PromoteHeaders(Source, [PromoteAllScalars = true]),
+				    Typed = Table.TransformColumnTypes(Promoted, {{"horizon", type text}, {"n", Int64.Type}, {"err_b0", type number}, {"err_b1", type number}, {"err_gbm", type number}}, "en-US")
+				in
+				    Typed
+
+	annotation PBI_ResultType = Table
