@@ -111,7 +111,7 @@ cd dbt; ..\.venv\Scripts\dbt.exe deps --profiles-dir . ; ..\.venv\Scripts\dbt.ex
 ```
 
 The Snowflake, AWS and model-training steps need your own accounts and credentials (never stored in
-this repo): see `warehouse/`, `infra/`, `scripts/teardown.ps1` (dry run by default),
+this repo; copy `.env.example` to `.env`, which is git-ignored, and fill in your own values): see `warehouse/`, `infra/`, `scripts/teardown.ps1` (dry run by default),
 `python -m ml.run`, `python -m ml.season_report` and `python -m undercut.report`.
 
 ## Power BI report
