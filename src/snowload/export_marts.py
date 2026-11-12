@@ -4,7 +4,7 @@ Usage (SNOWFLAKE_* variables set locally): python -m snowload.export_marts
 
 Writes every mart to data/export/marts/ (git-ignored backup, includes row-level lap data) and only
 the small aggregated marts to dashboard/data/ (committed; used by the Streamlit app). Row-level
-lap data is not committed because OpenF1's reuse terms have not been verified.
+lap data is not committed; only aggregates are published.
 """
 
 from pathlib import Path

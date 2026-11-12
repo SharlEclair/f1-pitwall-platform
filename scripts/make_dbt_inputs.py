@@ -7,7 +7,7 @@ Only facts and counts are copied; no secrets are involved.
 
 The `position` and `intervals` fixture tables are SYNTHETIC: they are derived from the committed
 fixture laps (order and gaps at each lap crossing), not copied from OpenF1, so they add no new
-row-level OpenF1 data to the repository (see ADR 0015 and the data-reuse note in the README).
+row-level OpenF1 data to the repository (see ADR 0015 and ADR 0018).
 """
 
 import csv

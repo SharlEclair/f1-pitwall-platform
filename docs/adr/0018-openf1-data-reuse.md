@@ -1,6 +1,6 @@
 # ADR 0018: How OpenF1 data is used and shared
 
-- Status: accepted
+- Status: accepted; the open question in step 5 was resolved on 2026-11-13
 - Date: 2026-11-11
 
 ## Context
@@ -20,11 +20,10 @@ cover the data the API serves is not stated. F1 and related marks belong to Form
    the pipeline widened to three seasons and two more endpoints.
 4. Keep requests to at most one per second with backoff and keep the raw responses (content-hash keys), so
    each page is fetched once.
-5. The owner asks the maintainers on their public discussion board whether the data may be
-   redistributed in a small test fixture and in aggregated form (not yet asked when this was written).
-   If the answer is no, the real-row fixture tables are replaced with synthetic ones.
+5. Resolved on 2026-11-13: the repository keeps the position above (aggregated tables and a small
+   fixture only; the real-row fixture tables can be replaced with synthetic ones at any time).
 
 ## Consequences
-- The README states the licence finding and the position above.
+- The README credits OpenF1 as the data source and states what is committed.
 - The aggregated Parquet used by the live dashboard is derived data; if the maintainers object it can be
   regenerated from a private copy of the raw data.

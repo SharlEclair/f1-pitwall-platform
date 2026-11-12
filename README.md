@@ -148,8 +148,6 @@ Architecture decisions are recorded in [docs/adr/](docs/adr/) (ADR 0001 to 0019)
 ## Data source and attribution
 
 Timing data comes from the unofficial [OpenF1](https://openf1.org) API. F1, FORMULA ONE and related
-marks are trademarks of Formula One Licensing B.V.; this project is not affiliated with them. OpenF1
-states no terms for reusing its data, and its source repository carries a Creative Commons
-Attribution-NonCommercial-ShareAlike 4.0 licence file whose scope over the data is not stated. This
-project is non-commercial, commits no full row-level data (only aggregated tables and a small CI
-fixture, partly synthetic) and keeps this notice; see [ADR 0018](docs/adr/0018-openf1-data-reuse.md).
+marks are trademarks of Formula One Licensing B.V.; this project is not affiliated with them. The
+repository commits only aggregated tables and a small CI fixture (partly synthetic), not the full
+row-level data; see [ADR 0018](docs/adr/0018-openf1-data-reuse.md).
